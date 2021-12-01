@@ -26,7 +26,7 @@ export default function Header({ content, courses, progressService }) {
               <Link href="/">
                 <a className="flex">
                   <span className="sr-only">Workflow</span>
-                  <CodeIcon className="h-8 w-auto sm:h-10" />
+                  <CodeIcon className="h-8 w-auto sm:h-10 text-blue-500" />
                 </a>
               </Link>
             </div>

@@ -10,10 +10,6 @@ const features = [
     description: "",
   },
   {
-    name: "30+ Real World Examples",
-    description: "",
-  },
-  {
     name: "Free and Open Source",
     description: "",
   },
@@ -34,9 +30,8 @@ export default function HomeHero() {
                       className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl"
                     >
                       <span className="block text-gray-900">
-                        Real World Testing
+                        Testing Next.js Applications with Cypress
                       </span>
-                      <span className="block text-gray-900">with Cypress</span>
                     </h1>
                     <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
                       Learn from top industry experts and level-up your testing
@@ -99,7 +94,7 @@ export default function HomeHero() {
                   <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
                     <img
                       className="w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                      src="/images/home/hero.png"
+                      src="https://tailwindui.com/img/component-images/inbox-app-screenshot-1.jpg"
                     />
                   </div>
                 </div>
