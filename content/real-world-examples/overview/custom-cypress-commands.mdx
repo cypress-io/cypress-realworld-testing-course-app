@@ -1,0 +1,1073 @@
+# Custom Cypress Commands
+
+## cy.createTransaction()
+
+This custom command exists to create a transaction without using the UI. Since we already have a test that makes a transaction via the UI, we can use this command to complete a transaction much faster.
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add("createTransaction", (payload) => {
+  const log = Cypress.log({
+    name: "createTransaction",
+    displayName: "CREATE TRANSACTION",
+    message: [
+      `💸 (${payload.transactionType}): ${payload.sender.id} <> ${payload.receiver.id}`,
+    ],
+    // @ts-ignore
+    autoEnd: false,
+    consoleProps() {
+      return payload
+    },
+  })
+
+  return cy
+    .window({ log: false })
+    .then((win) => {
+      log.snapshot("before")
+      win.createTransactionService.send("SET_USERS", payload)
+
+      const createPayload = pick(
+        ["amount", "description", "transactionType"],
+        payload
+      )
+
+      return win.createTransactionService.send("CREATE", {
+        ...createPayload,
+        senderId: payload.sender.id,
+        receiverId: payload.receiver.id,
+      })
+    })
+    .then(() => {
+      log.snapshot("after")
+      log.end()
+    })
+})
+```
+
+First, we use [Cypress.log()](https://docs.cypress.io/api/cypress-api/cypress-log) to log out some custom information to the Cypress Command Log.
+
+```js
+const log = Cypress.log({
+  name: "createTransaction",
+  displayName: "CREATE TRANSACTION",
+  message: [
+    `💸 (${payload.transactionType}): ${payload.sender.id} <> ${payload.receiver.id}`,
+  ],
+  // @ts-ignore
+  autoEnd: false,
+  consoleProps() {
+    return payload
+  },
+})
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_11.10.06_AM.png)
+
+Next, we use <apiLink apiName="window" displayName="cy.window()" /> to grab the `window` object from the browser. Then we take a DOM snapshot and send the `SET_USERS` action to the `createTransactionService` from Xstate. We intentionally expose this service to the `window` object so that Cypress has access to it.
+
+This service comes from the `createTransactionMachine` located at `src/machines/createTransactionMachine.ts` .
+
+```js
+return cy
+    .window({ log: false })
+    .then((win) => {
+      log.snapshot("before");
+      win.createTransactionService.send("SET_USERS", payload);
+```
+
+We then create the payload for our transaction. [Pick](https://lodash.com/docs/4.17.15#pick) is a method from [Lodash](https://lodash.com/).
+
+```js
+const createPayload = pick(
+  ["amount", "description", "transactionType"],
+  payload
+)
+```
+
+Then we send the `CREATE` action in the `createTransactionService` to create the transaction.
+
+```js
+return win.createTransactionService.send("CREATE", {
+  ...createPayload,
+  senderId: payload.sender.id,
+  receiverId: payload.receiver.id,
+})
+```
+
+Finally, we take one final DOM snapshot.
+
+```js
+.then(() => {
+      log.snapshot("after");
+      log.end();
+    });
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_11.17.16_AM.png)
+
+---
+
+## cy.database()
+
+This command is responsible for retrieving data from the database in the [RWA](https://github.com/cypress-io/cypress-realworld-app). Often we will use the data returned from this command to drive our tests.
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add(
+  "database",
+  (operation, entity, query, logTask = false) => {
+    const params = {
+      entity,
+      query,
+    }
+
+    const log = Cypress.log({
+      name: "database",
+      displayName: "DATABASE",
+      message: [`🔎 ${operation}ing within ${entity} data`],
+      // @ts-ignore
+      autoEnd: false,
+      consoleProps() {
+        return params
+      },
+    })
+
+    return cy
+      .task(`${operation}:database`, params, { log: logTask })
+      .then((data) => {
+        log.snapshot()
+        log.end()
+        return data
+      })
+  }
+)
+```
+
+The first thing we are doing is creating a `params` object comprised of the `entity` and `query` passed into the command.
+
+```js
+const params = {
+  entity,
+  query,
+}
+```
+
+Next, we are creating a custom log with [Cypress.log()](https://docs.cypress.io/api/cypress-api/cypress-log).
+
+```js
+const log = Cypress.log({
+  name: "database",
+  displayName: "DATABASE",
+  message: [`🔎 ${operation}ing within ${entity} data`],
+  // @ts-ignore
+  autoEnd: false,
+  consoleProps() {
+    return params
+  },
+})
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_2.52.40_PM.png)
+
+Finally, we are returning a custom task which is responsible for performing whatever `operation` is passed into this command upon our database, either `find` or `filter`.
+
+```js
+return cy
+  .task(`${operation}:database`, params, { log: logTask })
+  .then((data) => {
+    log.snapshot()
+    log.end()
+    return data
+  })
+```
+
+This task can be found in `cypress/plugins/index.ts` .
+
+```js
+on("task", {
+  percyHealthCheck,
+  async "db:seed"() {
+    // seed database with test data
+    const { data } = await axios.post(`${testDataApiEndpoint}/seed`)
+    return data
+  },
+
+  // fetch test data from a database (MySQL, PostgreSQL, etc...)
+  "filter:database"(queryPayload) {
+    return queryDatabase(queryPayload, (data, attrs) =>
+      _.filter(data.results, attrs)
+    )
+  },
+  "find:database"(queryPayload) {
+    return queryDatabase(queryPayload, (data, attrs) =>
+      _.find(data.results, attrs)
+    )
+  },
+})
+```
+
+You may be wondering why we have created this as a [task](https://docs.cypress.io/api/commands/task) instead of a Custom Cypress Command. The reason is that Cypress [tasks](https://docs.cypress.io/api/commands/task) run in Node, while Cypress Custom Commands run in the browser.
+
+---
+
+## cy.getBySel()
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add("getBySel", (selector, ...args) => {
+  return cy.get(`[data-test=${selector}]`, ...args)
+})
+```
+
+This simple command takes in a selector and then returns the DOM element by using <apiLink apiName="get" displayName="cy.get()" />.
+
+For example, without this command our code would look like this:
+
+```js
+cy.get('[data-test="signup-first-name"]').type("Bob")
+cy.get('[data-test="signup-last-name"]').type("Ross")
+cy.get('[data-test="signup-username"]').type("PainterJoy90")
+cy.get('[data-test="signup-password"]').type("s3cret")
+cy.get('[data-test="signup-confirmPassword"]').type("s3cret")
+```
+
+Using this custom command our code now looks like this:
+
+```js
+cy.getBySel("signup-first-name").type("Bob")
+cy.getBySel("signup-last-name").type("Ross")
+cy.getBySel("signup-username").type("PainterJoy90")
+cy.getBySel("signup-password").type("s3cret")
+cy.getBySel("signup-confirmPassword").type("s3cret")
+```
+
+---
+
+## cy.getBySelLike()
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add("getBySelLike", (selector, ...args) => {
+  return cy.get(`[data-test*=${selector}]`, ...args)
+})
+```
+
+This simple command takes in a selector wildcard `*` and returns the DOM element using <apiLink apiName="get" displayName="cy.get()" />. It functions similarly to our `cy.getBySel()` custom command only this command will return multiple elements, whereas `cy.getBySel()` will return only one.
+
+For example, below, we are getting all the transaction items and asserting that there are 3 of them in total.
+
+```js
+cy.getBySelLike("transaction-item").should("have.length", 3)
+```
+
+In this example, we are clicking upon the first transaction.
+
+```js
+cy.getBySelLike("transaction-item").first().click()
+```
+
+---
+
+## cy.login()
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add(
+  "login",
+  (username, password, { rememberUser = false } = {}) => {
+    const signinPath = "/signin"
+    const log = Cypress.log({
+      name: "login",
+      displayName: "LOGIN",
+      message: [`🔐 Authenticating | ${username}`],
+      // @ts-ignore
+      autoEnd: false,
+    })
+
+    cy.intercept("POST", "/login").as("loginUser")
+    cy.intercept("GET", "checkAuth").as("getUserProfile")
+
+    cy.location("pathname", { log: false }).then((currentPath) => {
+      if (currentPath !== signinPath) {
+        cy.visit(signinPath)
+      }
+    })
+
+    log.snapshot("before")
+
+    cy.getBySel("signin-username").type(username)
+    cy.getBySel("signin-password").type(password)
+
+    if (rememberUser) {
+      cy.getBySel("signin-remember-me").find("input").check()
+    }
+
+    cy.getBySel("signin-submit").click()
+    cy.wait("@loginUser").then((loginUser: any) => {
+      log.set({
+        consoleProps() {
+          return {
+            username,
+            password,
+            rememberUser,
+            userId:
+              loginUser.response.statusCode !== 401 &&
+              loginUser.response.body.user.id,
+          }
+        },
+      })
+
+      log.snapshot("after")
+      log.end()
+    })
+  }
+)
+```
+
+First, we create a constant called `signinPath` with the path for our sign-in page and use [Cypress.log()](https://docs.cypress.io/api/cypress-api/cypress-log) to log some additional information to the Cypress Command Log.
+
+```js
+const signinPath = "/signin"
+const log = Cypress.log({
+  name: "login",
+  displayName: "LOGIN",
+  message: [`🔐 Authenticating | ${username}`],
+  // @ts-ignore
+  autoEnd: false,
+})
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_10.10.06_AM.png)
+
+Next, we are using <apiLink apiName="intercept" displayName="cy.intercept()" /> to intercept two requests and aliasing them.
+
+```js
+cy.intercept("POST", "/login").as("loginUser")
+cy.intercept("GET", "checkAuth").as("getUserProfile")
+```
+
+We then check the `currentPath`, which is the URL in the browser's address bar. If it is not "/signin," then we use `<apiLink apiName="visit" displayName="cy.visit()" /> to navigate to "/signin."
+
+```js
+cy.location("pathname", { log: false }).then((currentPath) => {
+  if (currentPath !== signinPath) {
+    cy.visit(signinPath)
+  }
+})
+```
+
+We then take a DOM snapshot using [Cypress.log()](https://docs.cypress.io/api/cypress-api/cypress-log), which we declared above.
+
+```js
+log.snapshot("before")
+```
+
+We then grab the username and password input fields and type in the username and password, respectively.
+
+```js
+cy.getBySel("signin-username").type(username)
+cy.getBySel("signin-password").type(password)
+```
+
+Then we have a conditional to check if we want to "remember the user." By default, we set this to be `false` in the command signature.
+
+```js
+if (rememberUser) {
+  cy.getBySel("signin-remember-me").find("input").check()
+}
+```
+
+Finally, we click on the sign-in button and wait on the `@loginUser` intercept alias. We then use `log.set()` to set some of the login information in our [Cypress.log()](https://docs.cypress.io/api/cypress-api/cypress-log). We then take a final DOM snapshot and <apiLink apiName="end" displayName=".end()" /> our log.
+
+```js
+cy.getBySel("signin-submit").click()
+cy.wait("@loginUser").then((loginUser: any) => {
+  log.set({
+    consoleProps() {
+      return {
+        username,
+        password,
+        rememberUser,
+        userId:
+          loginUser.response.statusCode !== 401 &&
+          loginUser.response.body.user.id,
+      }
+    },
+  })
+
+  log.snapshot("after")
+  log.end()
+})
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_10.10.06_AM.png)
+
+---
+
+## cy.loginByAPI()
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add(
+  "loginByApi",
+  (username, password = Cypress.env("defaultPassword")) => {
+    return cy.request("POST", `${Cypress.env("apiUrl")}/login`, {
+      username,
+      password,
+    })
+  }
+)
+```
+
+This command logs in a user via one of our API endpoints. It takes the `username` and `password` and sends a `POST` request to our "/login" endpoint, and logs in our user.
+
+Note how we are using [Cypress.env()](https://docs.cypress.io/api/cypress-api/env) to handle our environment variables. You can find these in `cypres/plugins/index.ts` and `cypress.json`, respectively.
+
+---
+
+## cy.loginByXstate()
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add(
+  "loginByXstate",
+  (username, password = Cypress.env("defaultPassword")) => {
+    const log = Cypress.log({
+      name: "loginbyxstate",
+      displayName: "LOGIN BY XSTATE",
+      message: [`🔐 Authenticating | ${username}`],
+      autoEnd: false,
+    })
+
+    cy.intercept("POST", "/login").as("loginUser")
+    cy.intercept("GET", "/checkAuth").as("getUserProfile")
+    cy.visit("/signin", { log: false }).then(() => {
+      log.snapshot("before")
+    })
+
+    cy.window({ log: false }).then((win) =>
+      win.authService.send("LOGIN", { username, password })
+    )
+
+    cy.wait("@loginUser").then((loginUser) => {
+      log.set({
+        consoleProps() {
+          return {
+            username,
+            password,
+            // @ts-ignore
+            userId: loginUser.response.body.user.id,
+          }
+        },
+      })
+    })
+
+    return cy
+      .getBySel("list-skeleton")
+      .should("not.exist")
+      .then(() => {
+        log.snapshot("after")
+        log.end()
+      })
+  }
+)
+```
+
+A lot is going on in this custom command, but we will break it down step by step.
+
+First, the command expects a username or password when it is invoked. We are providing a default password by using [Cypress.env()](https://docs.cypress.io/api/cypress-api/env).
+
+This environment variable can be found in `cypress/plugins/index.ts` around line `15`.
+
+```js
+config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD
+```
+
+On the left hand side we are setting the [Cypress.env()](https://docs.cypress.io/api/cypress-api/env) with our environment variable from the `.env` file in the root of the project around line `10`
+
+```js
+SEED_DEFAULT_USER_PASSWORD = s3cret
+```
+
+Next, we are creating some custom logging with [Cypress.log()](https://docs.cypress.io/api/cypress-api/cypress-log).
+
+```js
+const log = Cypress.log({
+  name: "loginbyxstate",
+  displayName: "LOGIN BY XSTATE",
+  message: [`🔐 Authenticating | ${username}`],
+  autoEnd: false,
+})
+```
+
+Then, we use <apiLink apiName="intercept" displayName="cy.intercept()" /> to intercept two requests and alias them.
+
+```js
+cy.intercept("POST", "/login").as("loginUser")
+cy.intercept("GET", "/checkAuth").as("getUserProfile")
+```
+
+Then, we visit the `/signin` route and take a DOM snapshot of the page.
+
+```js
+cy.visit("/signin", { log: false }).then(() => {
+  log.snapshot("before")
+})
+```
+
+Next, we log in our user by sending an event to the [XState](https://xstate.js.org/docs/) store, responsible for handling all of our client-side state around authentication. It is very similar to [Redux](https://redux.js.org/). The `authservice` is attached to the `window` object, so we use <apiLink apiName="window" displayName="cy.window()" /> to grab the `window` object from the browser. We intentionally expose this service to the `window` object so that Cypress has access to it. You can see an example of how we are doing this [here](https://github.com/cypress-io/cypress-realworld-app/blob/86bc319b33a98fc70a5c2e431e98307f5f28e532/src/containers/App.tsx#L17-L21).
+
+Then we trigger the `LOGIN` action with our username and password, which updates XState, and logs in the user.
+
+```js
+cy.window({ log: false }).then((win) =>
+  win.authService.send("LOGIN", { username, password })
+)
+```
+
+We are then using <apiLink apiName="wait" displayName="cy.wait()" /> on the `@loginUser` intercept alias and set some of the login data in our [Cypress.log()](https://docs.cypress.io/api/cypress-api/cypress-log) declared above.
+
+```js
+return cy.wait("@loginUser").then((loginUser) => {
+    log.set({
+      consoleProps() {
+        return {
+          username,
+          password,
+          // @ts-ignore
+          userId: loginUser.response.body.user.id,
+        };
+      },
+    });
+```
+
+Once complete, we set our custom log to log the user's information. This information will be logged to the browser's console when we click on this step in the Cypress UI.
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_10.47.45_AM.png)
+
+Finally, we write an assertion to confirm that the "loading skeleton" is no longer in the DOM and take a final DOM snapshot.
+
+```js
+return cy
+  .getBySel("list-skeleton")
+  .should("not.exist")
+  .then(() => {
+    log.snapshot("after")
+    log.end()
+  })
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_10.49.15_AM.png)
+
+---
+
+## cy.logoutByXstate()
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add("logoutByXstate", () => {
+  const log = Cypress.log({
+    name: "logoutByXstate",
+    displayName: "LOGOUT BY XSTATE",
+    message: [`🔒 Logging out current user`],
+    // @ts-ignore
+    autoEnd: false,
+  })
+
+  cy.window({ log: false }).then((win) => {
+    log.snapshot("before")
+    win.authService.send("LOGOUT")
+  })
+
+  return cy
+    .location("pathname")
+    .should("equal", "/signin")
+    .then(() => {
+      log.snapshot("after")
+      log.end()
+    })
+})
+```
+
+First, we are using [Cypress.log()](https://docs.cypress.io/api/cypress-api/cypress-log) to log some custom information to the Cypress Command Log.
+
+```js
+const log = Cypress.log({
+  name: "logoutByXstate",
+  displayName: "LOGOUT BY XSTATE",
+  message: [`🔒 Logging out current user`],
+  // @ts-ignore
+  autoEnd: false,
+})
+```
+
+Next, we log out our user by updating the [XState](https://xstate.js.org/docs/) store, which handles all of our client-side state around authentication. It is very similar to [Redux](https://redux.js.org/). The `authservice` is attached to the `window` object, so we use <apiLink apiName="window" displayName="cy.window()" /> to grab the `window` object from the browser. We intentionally expose this service to the `window` object so that Cypress has access to it. You can see an example of how we are doing this [here](https://github.com/cypress-io/cypress-realworld-app/blob/86bc319b33a98fc70a5c2e431e98307f5f28e532/src/containers/App.tsx#L17-L21).
+
+Then we trigger the `LOGOUT` action, which updates XState, and logs out the user.
+
+```js
+cy.window({ log: false }).then((win) => {
+  log.snapshot("before")
+  win.authService.send("LOGOUT")
+})
+```
+
+Finally, we write an assertion that the application redirects us to the "/signin" page after being logged out. We then take a final DOM snapshot.
+
+```js
+return cy
+  .location("pathname")
+  .should("equal", "/signin")
+  .then(() => {
+    log.snapshot("after")
+    log.end()
+  })
+```
+
+---
+
+## cy.nextTransactionFeedPage()
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add("nextTransactionFeedPage", (service, page) => {
+  const log = Cypress.log({
+    name: "nextTransactionFeedPage",
+    displayName: "NEXT TRANSACTION FEED PAGE",
+    message: [`📃 Fetching page ${page} with ${service}`],
+    // @ts-ignore
+    autoEnd: false,
+    consoleProps() {
+      return {
+        service,
+        page,
+      }
+    },
+  })
+
+  return cy
+    .window({ log: false })
+    .then((win) => {
+      log.snapshot("before")
+      // @ts-ignore
+      return win[service].send("FETCH", { page })
+    })
+    .then(() => {
+      log.snapshot("after")
+      log.end()
+    })
+})
+```
+
+First, we are outputting some custom information to the Cypress Command Log.
+
+```js
+const log = Cypress.log({
+  name: "nextTransactionFeedPage",
+  displayName: "NEXT TRANSACTION FEED PAGE",
+  message: [`📃 Fetching page ${page} with ${service}`],
+  // @ts-ignore
+  autoEnd: false,
+  consoleProps() {
+    return {
+      service,
+      page,
+    }
+  },
+})
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_2.32.20_PM.png)
+
+Next, we are using <apiLink apiName="window" displayName="cy.window()" /> to grab the window object and take a DOM snapshot with `log.snapshot("before")`. We then send the `FETCH` action to whichever service is passed in along with the page number. We use pagination in the application, so the page number represents which paginated page of transactions we would like to return.
+
+We intentionally expose these services from our machines in Xstate to the `window` object so that Cypress has access to them.
+
+Then, we take one final DOM snapshot and end the log.
+
+```js
+return cy
+  .window({ log: false })
+  .then((win) => {
+    log.snapshot("before")
+    // @ts-ignore
+    return win[service].send("FETCH", { page })
+  })
+  .then(() => {
+    log.snapshot("after")
+    log.end()
+  })
+```
+
+---
+
+## cy.pickDateRange()
+
+This command is responsible for selecting dates from a 3rd party date picker. We decided to wrap this functionality into a command. It wraps some complex interactions with a 3rd party component, is used in multiple tests, and provides proper logging for what the command is doing in the Cypress Command Log.
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
+  const log = Cypress.log({
+    name: "pickDateRange",
+    displayName: "PICK DATE RANGE",
+    message: [`🗓 ${startDate.toDateString()} to ${endDate.toDateString()}`],
+    // @ts-ignore
+    autoEnd: false,
+    consoleProps() {
+      return {
+        startDate,
+        endDate,
+      }
+    },
+  })
+
+  const selectDate = (date: number) => {
+    return cy
+      .get(`[data-date='${formatDate(date, "yyyy-MM-dd")}']`)
+      .click({ force: true })
+  }
+
+  log.snapshot("before")
+  // Focus initial viewable date picker range around target start date
+  // @ts-ignore
+  cy.clock(startDate.getTime(), ["Date"])
+
+  // Open date range picker
+  cy.getBySelLike("filter-date-range-button").click({ force: true })
+  cy.get(".Cal__Header__root").should("be.visible")
+
+  // Select date range
+  selectDate(startDate)
+  selectDate(endDate).then(() => {
+    log.snapshot("after")
+    log.end()
+  })
+
+  cy.get(".Cal__Header__root").should("not.exist")
+})
+```
+
+First, we are using [Cypress.log()](https://docs.cypress.io/api/cypress-api/cypress-log) to output some custom information to the Cypress Command Log.
+
+```js
+const log = Cypress.log({
+  name: "pickDateRange",
+  displayName: "PICK DATE RANGE",
+  message: [`🗓 ${startDate.toDateString()} to ${endDate.toDateString()}`],
+  // @ts-ignore
+  autoEnd: false,
+  consoleProps() {
+    return {
+      startDate,
+      endDate,
+    }
+  },
+})
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_2.39.52_PM.png)
+
+Next, we create a convenience function called `selectDate`, which gets the date picker and selects the date passed into it.
+
+```js
+const selectDate = (date: number) => {
+  return cy
+    .get(`[data-date='${formatDate(date, "yyyy-MM-dd")}']`)
+    .click({ force: true })
+}
+```
+
+Then, we take a DOM snapshot and using <apiLink apiName="clock" displayName="cy.clock()" /> to set the current time based upon our start date.
+
+```js
+log.snapshot("before")
+// Focus initial viewable date picker range around target start date
+// @ts-ignore
+cy.clock(startDate.getTime(), ["Date"])
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_2.43.50_PM.png)
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_2.44.16_PM.png)
+
+Next, we click on the date range picker and assert that it is visible.
+
+```js
+cy.getBySelLike("filter-date-range-button").click({ force: true })
+cy.get(".Cal__Header__root").should("be.visible")
+```
+
+Then we use the `selectDate` function declared above to select both the starting and ending date of our range.
+
+```js
+selectDate(startDate)
+selectDate(endDate).then(() => {
+  log.snapshot("after")
+  log.end()
+})
+```
+
+Finally, we assert that the date picker is closed after both dates are selected.
+
+```js
+cy.get(".Cal__Header__root").should("not.exist")
+```
+
+---
+
+## cy.reactComponent()
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
+  if ($el.length !== 1) {
+    throw new Error(
+      `cy.component() requires element of length 1 but got ${$el.length}`
+    )
+  }
+  // Query for key starting with __reactInternalInstance$ for React v16.x
+  //
+  const key = Object.keys($el.get(0)).find((key) =>
+    key.startsWith("__reactFiber$")
+  )
+
+  // @ts-ignore
+  const domFiber = $el.prop(key)
+
+  Cypress.log({
+    name: "component",
+    consoleProps() {
+      return {
+        component: domFiber,
+      }
+    },
+  })
+
+  return domFiber.return
+})
+```
+
+This command allows us to get access to a React component's props, in order to programmatically interact with them.
+
+For instance, in the `setTransactionAmountRange` command, we need to trigger the `onChange` event for our React component. Still, to do that, we need the actual component, not the DOM element that <apiLink apiName="get" displayName="cy.get()" /> would return us. `cy.reactComponent()` queries the previously chained element for the [React Fiber instance](https://reactjs.org/docs/faq-internals.html#what-is-react-fiber) to retrieve the props containing the `onChange` to call programmatically.
+
+## cy.setTransactionAmountRange()
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
+  cy.getBySel("transaction-list-filter-amount-range-button")
+    .scrollIntoView()
+    .click({ force: true })
+
+  return cy
+    .getBySelLike("filter-amount-range-slider")
+    .reactComponent()
+    .its("memoizedProps")
+    .invoke("onChange", null, [min / 10, max / 10])
+})
+```
+
+First, we are getting the date range filter on the transaction page.
+
+```js
+cy.getBySel("transaction-list-filter-amount-range-button")
+  .scrollIntoView()
+  .click({ force: true })
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_10.38.19_AM.png)
+
+We then use the custom Cypress command `cy.reactComponent()` explained above, to set the min and max values of the slider. We are able to do this since the `cy.reactComponent()` command gives us access to the `memoizedProps` on the component which allows us to programmatically trigger the `onChange()` event setting the minimum and maximum values for the slider.
+
+```js
+return cy
+  .getBySelLike("filter-amount-range-slider")
+  .reactComponent()
+  .its("memoizedProps")
+  .invoke("onChange", null, [min / 10, max / 10])
+```
+
+Example usage.
+
+```js
+cy.setTransactionAmountRange(200, 800)
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_10.39.06_AM.png)
+
+---
+
+## cy.switchUserByXstate()
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add("switchUserByXstate", (username) => {
+  cy.logoutByXstate()
+  return cy.loginByXstate(username).then(() => {
+    if (isMobile()) {
+      cy.getBySel("sidenav-toggle").click()
+      cy.getBySel("sidenav-username").contains(username)
+      cy.getBySel("sidenav-toggle").click({ force: true })
+    } else {
+      cy.getBySel("sidenav-username").contains(username)
+    }
+    cy.getBySel("list-skeleton").should("not.exist")
+    cy.getBySelLike("transaction-item").should("have.length.greaterThan", 1)
+  })
+})
+```
+
+We have two custom Cypress commands called `cy.logoutByXstate()` and `cy.loginByXstate()` . This command utilizes both to log out the current user and then log in as a new user, whose username we pass in when we invoke this command.
+
+We then use our `isMobile()` utility function to determine if this test is being run inside a mobile viewport and click on the appropriate buttons.
+
+```js
+if (isMobile()) {
+  cy.getBySel("sidenav-toggle").click()
+  cy.getBySel("sidenav-username").contains(username)
+  cy.getBySel("sidenav-toggle").click({ force: true })
+} else {
+  cy.getBySel("sidenav-username").contains(username)
+}
+```
+
+Finally, we write two assertions to ensure that the "list skeleton" on the transaction page is no longer in the DOM and that more than one transaction is displayed in the UI.
+
+```js
+cy.getBySel("list-skeleton").should("not.exist")
+cy.getBySelLike("transaction-item").should("have.length.greaterThan", 1)
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_11.04.58_AM.png)
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_11.05.06_AM.png)
+
+---
+
+## cy.visualSnapshot()
+
+Located in `cypress/support/commands.ts` .
+
+```js
+Cypress.Commands.add("visualSnapshot", (maybeName) => {
+  // @ts-ignore
+  let snapshotTitle = cy.state("runnable").fullTitle()
+  if (maybeName) {
+    snapshotTitle = snapshotTitle + " - " + maybeName
+  }
+  cy.percySnapshot(snapshotTitle, {
+    // @ts-ignore
+    widths: [cy.state("viewportWidth")],
+    // @ts-ignore
+    minHeight: cy.state("viewportHeight"),
+  })
+})
+```
+
+![](/images/real-world-examples/custom-commands/Screen_Shot_2021-09-21_at_9.43.27_AM.png)
+
+The Cypress [Real World App (RWA)](https://github.com/cypress-io/cypress-realworld-app) uses the `cy.percySnapshot()` command provided by the Cypress Percy plugin to take visual snapshots throughout the user journey end-to-end tests. You can learn more about using Percy with Cypress [here](https://docs.cypress.io/guides/tooling/visual-testing#Percy).
+
+First, we create a variable called `snapshotTitle` that creates a title for our visual snapshot.
+
+```js
+let snapshotTitle = cy.state("runnable").fullTitle()
+```
+
+Next, if a string has been passed into our command, we append it to the end of our title.
+
+```js
+if (maybeName) {
+  snapshotTitle = snapshotTitle + " - " + maybeName
+}
+```
+
+It is important that we provide a name for each snapshot and that each name is unique.
+
+Finally, we take a snapshot using the `cy.percySnapshot()` command and pass in the `snapshotTitle`, `width` and `minheight` from our current viewport. The `cy.percySnapshot()` command comes from a package created by the Percy team called @percy/cypress and can be found [here](https://github.com/percy/percy-cypress).
+
+```js
+cy.percySnapshot(snapshotTitle, {
+  // @ts-ignore
+  widths: [cy.state("viewportWidth")],
+  // @ts-ignore
+  minHeight: cy.state("viewportHeight"),
+})
+```
+
+---
+
+## cy.task("db:seed")
+
+Located in `cypress/plugins/index.ts` .
+
+```js
+async "db:seed"() {
+  // seed database with test data
+  const { data } = await axios.post(`${testDataApiEndpoint}/seed`);
+  return data;
+},
+```
+
+This task is responsible for making a request to an API endpoint, which triggers the backend to reseed the database. You will see this task quite frequently used within a `beforeEach()` so that we have freshly seeded data before each test is run. This reseeding technique is one of the strategies covered in the [Database Initialization & Seeding lesson](/advanced-cypress-concepts/database-initialization-and-seeding).
+
+---
+
+## isMobile()
+
+Located in `cypress/support/utils.ts` .
+
+```js
+export const isMobile = () => {
+  return (
+    Cypress.config("viewportWidth") <
+    Cypress.env("mobileViewportWidthBreakpoint")
+  )
+}
+```
+
+This function is a utility function used throughout our Cypress tests to determine if the viewport is a mobile device or not.
+
+Both of the environment variables can be found inside the `cypress.json` file in the root of the repo.
+
+```json
+{
+  "baseUrl": "http://localhost:3000",
+  "projectId": "7s5okt",
+  "integrationFolder": "cypress/tests",
+  "viewportHeight": 1000,
+  "viewportWidth": 1280, // Cypress.config("viewportWidth")
+  "retries": {
+    "runMode": 2,
+    "openMode": 1
+  },
+  "env": {
+    "apiUrl": "http://localhost:3001",
+    "mobileViewportWidthBreakpoint": 414, // Cypress.env("mobileViewportWidthBreakpoint")
+    "coverage": false,
+    "codeCoverage": {
+      "url": "http://localhost:3001/__coverage__"
+    }
+  },
+  "experimentalStudio": true
+}
+```
+
+This handy function will only be executed whenever our viewport width is less than `414px`.
+
+This allows the same test to be used in both Desktop and Mobile orientations instead of coding mobile-specific tests.

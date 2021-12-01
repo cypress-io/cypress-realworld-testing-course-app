@@ -1,0 +1,98 @@
+# Transaction View Overview & Setup
+
+In this section, we will be discussing the various tests located within the **cypress/tests/ui/new-transaction-view.spec.ts** file.
+
+Let's break down what is happening within the `beforeEach()` as it is important to understand what is going on since this hook is running before each test.
+
+## beforeEach()
+
+```js
+const ctx: NewTransactionCtx = {}
+
+beforeEach(function () {
+  cy.task("db:seed")
+
+  cy.intercept("GET", "/transactions*").as("personalTransactions")
+  cy.intercept("GET", "/transactions/public*").as("publicTransactions")
+  cy.intercept("GET", "/transactions/*").as("getTransaction")
+  cy.intercept("PATCH", "/transactions/*").as("updateTransaction")
+
+  cy.intercept("GET", "/checkAuth").as("userProfile")
+  cy.intercept("GET", "/notifications").as("getNotifications")
+  cy.intercept("GET", "/bankAccounts").as("getBankAccounts")
+
+  cy.database("find", "users").then((user: User) => {
+    ctx.authenticatedUser = user
+
+    cy.loginByXstate(ctx.authenticatedUser.username)
+
+    cy.database("find", "transactions", {
+      receiverId: ctx.authenticatedUser.id,
+      status: "pending",
+      requestStatus: "pending",
+      requestResolvedAt: "",
+    }).then((transaction: Transaction) => {
+      ctx.transactionRequest = transaction
+    })
+  })
+
+  cy.getBySel("nav-personal-tab").click()
+  cy.wait("@personalTransactions")
+})
+```
+
+You can find out more information about the custom Cypress commands used [here](/real-world-examples/custom-cypress-commands).
+
+The `ctx` object is an empty object that we will later populate within the `beforeEach()` with some user data used through the tests in this file.
+
+First, we are using a custom Cypress task to seed our database.
+
+```js
+cy.task("db:seed")
+```
+
+Next, we use <apiLink apiName="intercept" displayName="cy.intercept()" /> to intercept various requests and aliasing them.
+
+```js
+cy.intercept("GET", "/transactions*").as("personalTransactions")
+cy.intercept("GET", "/transactions/public*").as("publicTransactions")
+cy.intercept("GET", "/transactions/*").as("getTransaction")
+cy.intercept("PATCH", "/transactions/*").as("updateTransaction")
+
+cy.intercept("GET", "/checkAuth").as("userProfile")
+cy.intercept("GET", "/notifications").as("getNotifications")
+cy.intercept("GET", "/bankAccounts").as("getBankAccounts")
+```
+
+Then, we use a custom Cypress command `cy.database()` to retrieve the users from our database. We then add this user to our `ctx` object and log in with `cy.loginByXstate()`.
+We then perform another query to our database using `cy.databse()` to find all of the "pending" transactions for our user and store said pending transaction on the `ctx` object.
+
+```js
+cy.database("find", "users").then((user: User) => {
+  ctx.authenticatedUser = user
+
+  cy.loginByXstate(ctx.authenticatedUser.username)
+
+  cy.database("find", "transactions", {
+    receiverId: ctx.authenticatedUser.id,
+    status: "pending",
+    requestStatus: "pending",
+    requestResolvedAt: "",
+  }).then((transaction: Transaction) => {
+    ctx.transactionRequest = transaction
+  })
+})
+```
+
+![](/images/real-world-examples/transaction-view/transaction-view-overview-and-setup/Screen_Shot_2021-09-16_at_9.18.09_AM.png)
+
+![](/images/real-world-examples/transaction-view/transaction-view-overview-and-setup/Screen_Shot_2021-09-16_at_9.18.44_AM.png)
+
+Finally, we click on the personal transaction tab and wait on the `@personalTransactions` intercept.
+
+```js
+cy.getBySel("nav-personal-tab").click()
+cy.wait("@personalTransactions")
+```
+
+![](/images/real-world-examples/transaction-view/transaction-view-overview-and-setup/Screen_Shot_2021-09-16_at_9.19.05_AM.png)

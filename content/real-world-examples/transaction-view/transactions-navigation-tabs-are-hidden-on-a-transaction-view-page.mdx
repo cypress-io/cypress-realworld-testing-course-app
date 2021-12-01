@@ -1,0 +1,35 @@
+# transactions navigation tabs are hidden on a transaction view page
+
+Before continuing, make sure you have read the [Transaction View Overview & Setup](/real-world-examples/transaction-view-overview-and-setup) lesson first.
+
+```js
+it("transactions navigation tabs are hidden on a transaction view page", function () {
+  cy.getBySelLike("transaction-item").first().click()
+  cy.location("pathname").should("include", "/transaction")
+  cy.getBySel("nav-transaction-tabs").should("not.exist")
+  cy.getBySel("transaction-detail-header").should("be.visible")
+  cy.visualSnapshot("Transaction Navigation Tabs Hidden")
+})
+```
+
+You can find out more information about the custom Cypress commands used in this test [here](/real-world-examples/custom-cypress-commands).
+
+This is a relatively straightforward test in which we are making sure that the transaction navigation tabs are hidden on the transaction view page.
+
+The first thing we do is click on the first transaction and confirm that the application routes us to that transactions page.
+
+```js
+cy.getBySelLike("transaction-item").first().click()
+cy.location("pathname").should("include", "/transaction")
+```
+
+![](/images/real-world-examples/transaction-view/transactions-navigation-tabs-are-hidden-on-a-transaction-view-page/Screen_Shot_2021-09-16_at_9.26.18_AM.png)
+
+Finally, we confirm that the transaction tabs are not in the DOM and that the transaction header is visible.
+
+```js
+cy.getBySel("nav-transaction-tabs").should("not.exist")
+cy.getBySel("transaction-detail-header").should("be.visible")
+```
+
+![](/images/real-world-examples/transaction-view/transactions-navigation-tabs-are-hidden-on-a-transaction-view-page/Screen_Shot_2021-09-16_at_9.26.40_AM.png)

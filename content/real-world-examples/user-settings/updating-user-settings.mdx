@@ -1,0 +1,64 @@
+# Updating User Settings
+
+Before continuing, make sure you have read the [User Settings Overview & Setup](/real-world-examples/user-settings-overview-and-setup) lesson first.
+
+```js
+it("updates first name, last name, email and phone number", function () {
+  cy.getBySelLike("firstName").clear().type("New First Name")
+  cy.getBySelLike("lastName").clear().type("New Last Name")
+  cy.getBySelLike("email").clear().type("email@email.com")
+  cy.getBySelLike("phoneNumber-input").clear().type("6155551212").blur()
+
+  cy.getBySelLike("submit").should("not.be.disabled")
+  cy.getBySelLike("submit").click()
+
+  cy.wait("@updateUser").its("response.statusCode").should("equal", 204)
+
+  if (isMobile()) {
+    cy.getBySel("sidenav-toggle").click()
+  }
+
+  cy.getBySel("sidenav-user-full-name").should("contain", "New First Name")
+  cy.visualSnapshot("User Settings Update Profile")
+})
+```
+
+You can find out more information about the custom Cypress commands used in this test [here](/real-world-examples/custom-cypress-commands).
+
+First, we need to grab all of the input fields and fill them with the data we want to update.
+
+```js
+cy.getBySelLike("firstName").clear().type("New First Name")
+cy.getBySelLike("lastName").clear().type("New Last Name")
+cy.getBySelLike("email").clear().type("email@email.com")
+cy.getBySelLike("phoneNumber-input").clear().type("6155551212").blur()
+```
+
+We then assert that the submit is not disabled and then <apiLink apiName="click" displayName=".click()" /> on it.
+
+```js
+cy.getBySelLike("submit").should("not.be.disabled")
+cy.getBySelLike("submit").click()
+```
+
+Next, we make an assertion that our intercept which is aliased to `@updateUser` returns the correct status code. Remember this intercept happens inside the `beforeEach()` hook before every test is run.
+
+```js
+cy.wait("@updateUser").its("response.statusCode").should("equal", 204)
+```
+
+Then we use our custom `isMobile()` utility function to determine if this is a mobile device or not. If so, we click on the button to toggle the sidebar.
+
+```js
+if (isMobile()) {
+  cy.getBySel("sidenav-toggle").click()
+}
+```
+
+Finally, we make an assertion that our new name entered has been updated succesfully.
+
+```js
+cy.getBySel("sidenav-user-full-name").should("contain", "New First Name")
+```
+
+![](/images/real-world-examples/user-settings/updating-user-settings/Screen_Shot_2021-06-29_at_3.12.06_PM.png)

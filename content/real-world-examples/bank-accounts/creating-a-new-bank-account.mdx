@@ -1,0 +1,90 @@
+# Creating a New Bank Account
+
+Before continuing, make sure you have read the [Bank Accounts Overview & Setup](/real-world-examples/bank-accounts-overview-and-setup) lesson first.
+
+```js
+it("creates a new bank account", function () {
+  cy.wait("@getNotifications")
+  if (isMobile()) {
+    cy.getBySel("sidenav-toggle").click()
+  }
+
+  cy.getBySel("sidenav-bankaccounts").click()
+
+  cy.getBySel("bankaccount-new").click()
+  cy.location("pathname").should("eq", "/bankaccounts/new")
+  cy.visualSnapshot("Display New Bank Account Form")
+
+  cy.getBySelLike("bankName-input").type("The Best Bank")
+  cy.getBySelLike("routingNumber-input").type("987654321")
+  cy.getBySelLike("accountNumber-input").type("123456789")
+  cy.visualSnapshot("Fill out New Bank Account Form")
+  cy.getBySelLike("submit").click()
+
+  cy.wait("@gqlCreateBankAccountMutation")
+
+  cy.getBySelLike("bankaccount-list-item")
+    .should("have.length", 2)
+    .eq(1)
+    .should("contain", "The Best Bank")
+  cy.visualSnapshot("Bank Account Created")
+})
+```
+
+You can find out more information about the custom Cypress commands used in this test [here](/real-world-examples/custom-cypress-commands).
+
+First, we wait upon our aliased intercept `@getNotifications`
+
+```js
+cy.wait("@getNotifications")
+```
+
+Next, we click on the "Bank Accounts" link in the left sidebar, depending upon if we are a mobile device or not. You can find out more info about the `isMobile()` utility function [here](/real-world-examples/custom-cypress-commands).
+
+```js
+if (isMobile()) {
+  cy.getBySel("sidenav-toggle").click()
+}
+
+cy.getBySel("sidenav-bankaccounts").click()
+```
+
+![](/images/real-world-examples/bank-accounts/creating-a-new-bank-account/Screen_Shot_2021-06-30_at_10.19.19_AM.png)
+
+Next, we will click on the "Create" button and write an assertion that the application has taken us to the correct screen by validating the URL.
+
+```js
+cy.getBySel("bankaccount-new").click()
+cy.location("pathname").should("eq", "/bankaccounts/new")
+```
+
+![](/images/real-world-examples/bank-accounts/creating-a-new-bank-account/Screen_Shot_2021-06-30_at_10.21.15_AM.png)
+
+Then, we fill out the new bank account form with our bank account information and save it.
+
+```js
+// Create Bank Account Form
+cy.getBySelLike("bankName-input").type("The Best Bank")
+cy.getBySelLike("routingNumber-input").type("987654321")
+cy.getBySelLike("accountNumber-input").type("123456789")
+cy.getBySelLike("submit").click()
+```
+
+![](/images/real-world-examples/bank-accounts/creating-a-new-bank-account/Screen_Shot_2021-06-30_at_10.22.29_AM.png)
+
+We then wait for our GraphQL mutation to create a new bank account.
+
+```js
+cy.wait("@gqlCreateBankAccountMutation")
+```
+
+Finally, we will write an assertion that ensures that our new bank account is created successfully.
+
+```js
+cy.getBySelLike("bankaccount-list-item")
+  .should("have.length", 2)
+  .eq(1)
+  .should("contain", "The Best Bank")
+```
+
+![](/images/real-world-examples/bank-accounts/creating-a-new-bank-account/Screen_Shot_2021-06-30_at_10.25.36_AM.png)

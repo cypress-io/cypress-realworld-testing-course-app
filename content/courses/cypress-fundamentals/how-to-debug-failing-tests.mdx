@@ -1,0 +1,51 @@
+# How to Debug Failing Tests
+
+Knowing how to debug failing tests is arguably one of the most important and useful skills for you to learn. In this lesson we will discuss various tips, methods and techniques to help you debug and fix your failing tests.
+
+## Cypress UI
+
+The Cypress UI is one of the fastest ways to figure out what went wrong with your tests.
+
+![](/images/cypress-fundamentals/how-to-debug-failing-tests/Screen_Shot_2021-08-31_at_2.42.05_PM.png)
+
+It can also be incredibly useful to see all of the steps your tests took before the error was triggered. When you click on a step, Cypress will output useful information to the browser's console.
+
+For example, in the failing test above, when clicking upon the assertion step, Cypress logs out the actual array in the console, which after inspection shows that there is only a single element within it.
+
+![](/images/cypress-fundamentals/how-to-debug-failing-tests/Screen_Shot_2021-08-31_at_2.43.25_PM.png)
+
+## Screenshots & Videos
+
+When you are running Cypress in headless mode by using the `cypress run` command, screenshots and videos will automatically be recorded anytime there is a failure. This is incredibly useful, especially when running your tests in CI, as it provides you with not only a screenshot at the exact point of failure, but also a video of your failing test.
+
+You can tell Cypress to take a screenshot manually by using the <apiLink apiName="screenshot" displayName="cy.screenshot()" /> command.
+
+## Logging
+
+There are two useful ways to log information from your tests. One way is to use <apiLink apiName="log" displayName="cy.log()" /> the other is to use `console.log()` . Remember [Cypress is just JavaScript](/cypress-fundamentals/cypress-is-just-javascript) so you can leverage all of the helpful debugging techniques you use in JS too.
+
+[cy.log()](https://docs.cypress.io/api/commands/log) will print a message to the Cypress Command Log
+
+![](/images/cypress-fundamentals/how-to-debug-failing-tests/Screen_Shot_2021-08-31_at_2.55.00_PM.png)
+
+You can also use `console.log()` which will log to the browser's console.
+
+```js
+console.log("my custom message")
+```
+
+![](/images/cypress-fundamentals/how-to-debug-failing-tests/Screen_Shot_2021-08-31_at_2.55.53_PM.png)
+
+## Browser Dev Tools
+
+Since Cypress runs in the browser, you have full access to all of the information from your browser's developer tools. This means you can use the same techniques and functionality you are used to using when debugging issues with your application code to debug your failing Cypress tests too.
+
+![](/images/cypress-fundamentals/how-to-debug-failing-tests/browser-dev-tools.gif)
+
+## Practice
+
+If you would like to practice how to debug failing tests in Cypress, we have created a special repo which can be found [here](https://github.com/cypress-io/cypress-realworld-testing-blog). The installation instructions are located in the **README.md** file.
+
+The practice file you are looking for can be found in **cypress/integration/Practice/debug-failing-tests.spec.js**.
+
+Should you get stuck or need some help, all of the answers are provided within **cypress/integration/Answers/debug-failing-tests.spec.js**

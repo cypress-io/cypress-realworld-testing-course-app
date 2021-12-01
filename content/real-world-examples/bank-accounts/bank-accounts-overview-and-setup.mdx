@@ -1,0 +1,99 @@
+# Bank Accounts Overview & Setup
+
+In this section, we will be discussing the various tests located within the **cypress/tests/ui/bankaccounts.spec.ts** file.
+
+Let's break down what is happening within the `beforeEach()` as it is essential to understand what is going on since this hook is running before each test.
+
+## beforeEach()
+
+```js
+beforeEach(function () {
+  cy.task("db:seed")
+
+  cy.intercept("GET", "/notifications").as("getNotifications")
+
+  cy.intercept("POST", apiGraphQL, (req) => {
+    const { body } = req
+
+    if (
+      body.hasOwnProperty("operationName") &&
+      body.operationName === "ListBankAccount"
+    ) {
+      req.alias = "gqlListBankAccountQuery"
+    }
+
+    if (
+      body.hasOwnProperty("operationName") &&
+      body.operationName === "CreateBankAccount"
+    ) {
+      req.alias = "gqlCreateBankAccountMutation"
+    }
+
+    if (
+      body.hasOwnProperty("operationName") &&
+      body.operationName === "DeleteBankAccount"
+    ) {
+      req.alias = "gqlDeleteBankAccountMutation"
+    }
+  })
+
+  cy.database("find", "users").then((user: User) => {
+    ctx.user = user
+
+    return cy.loginByXstate(ctx.user.username)
+  })
+})
+```
+
+You can find out more information about the custom Cypress commands used [here](/real-world-examples/custom-cypress-commands).
+
+The first thing we are doing is seeding our database using a custom Cypress task.
+
+```js
+cy.task("db:seed")
+```
+
+Next, we use <apiLink apiName="intercept" displayName="cy.intercept()" /> to intercept every **GET** request to the **/notifications** route. We are then aliasing this intercept to "getNotifications." When you see `@getNotifications` used within a test, it is referring to this intercept.
+
+```js
+cy.intercept("GET", "/notifications").as("getNotifications")
+```
+
+Next, we have another <apiLink apiName="intercept" displayName="cy.intercept()" /> to intercept every **POST** request to our GraphQL endpoint. We then have three conditionals to determine the GraphQL query and then set the appropriate alias accordingly.
+
+```js
+cy.intercept("POST", apiGraphQL, (req) => {
+  const { body } = req
+
+  if (
+    body.hasOwnProperty("operationName") &&
+    body.operationName === "ListBankAccount"
+  ) {
+    req.alias = "gqlListBankAccountQuery"
+  }
+
+  if (
+    body.hasOwnProperty("operationName") &&
+    body.operationName === "CreateBankAccount"
+  ) {
+    req.alias = "gqlCreateBankAccountMutation"
+  }
+
+  if (
+    body.hasOwnProperty("operationName") &&
+    body.operationName === "DeleteBankAccount"
+  ) {
+    req.alias = "gqlDeleteBankAccountMutation"
+  }
+})
+```
+
+Finally, we use a custom Cypress command `cy.database()` to query our database for our users. Then we use another custom Cypress command `cy.loginByXstate()` to log in to the application using one of the users returned from the `cy.database()`.
+
+You can find out how these custom Commands work in greater detail [here](/real-world-examples/custom-cypress-commands).
+
+```js
+cy.database("find", "users").then((user: User) => {
+  cy.loginByXstate(user.username)
+})
+```

@@ -1,0 +1,76 @@
+# Using Data to Build Dynamic Tests
+
+In the lesson [Database Initialization & Seeding](/advanced-cypress-concepts/database-initialization-and-seeding), we give you several strategies for creating the data necessary for your tests. In this lesson, we will help you better understand how to use that data to drive your tests.
+
+## What are Data-Driven Tests?
+
+When we speak of "Data-Driven Tests," we refer to using variables, fixtures, or data from a database to construct all aspects of a test (UI interactions, expectations, and the test itself).
+
+For example, let's say you have a test which tests the login form in your app. You could hard code the data, like so:
+
+```js
+cy.get("username").type("jdoe")
+cy.get("password").type("password123")
+```
+
+Or you could use data from variables.
+
+```js
+const users = [
+  {
+    username: "John",
+    password: "password123",
+  },
+  {
+    username: "Jane",
+    password: "password123",
+  },
+]
+
+cy.get("username").type(users[0].username)
+cy.get("password").type(users[0].password)
+```
+
+You could also use data from a [fixture](https://docs.cypress.io/api/commands/fixture).
+
+```js
+cy.fixture("users.json").as("usersData")
+
+cy.get("username").type(usersData[0].username)
+cy.get("password").type(usersData[0].password)
+```
+
+Or, you could use an actual user from your database.
+
+## Using data from remote systems (API, database, etc.) to drive seed data and tests
+
+```js
+describe("Notifications", function () {
+  const ctx = {}
+
+  beforeEach(function () {
+    // ...
+
+    cy.database("filter", "users").then((users) => {
+      ctx.userA = users[0]
+      ctx.userB = users[1]
+      ctx.userC = users[2]
+    })
+  })
+
+  it("allows users to login", () => {
+    cy.get("username").type(ctx.userA.userName)
+    cy.get("password").type(ctx.userA.password)
+  })
+})
+```
+
+In this example, `cy.database()` is a custom Cypress command which performs operations on our database depending upon which arguments are passed into it. You can learn how this command works [here](/real-world-examples/custom-cypress-commands#cydatabase).
+
+## Benefits of Data-Driven Tests
+
+Using actual data has several benefits. First, you are using existing data from your application. This more closely mimics how real users interact with your app. Hard-coded data can be challenging to maintain over time, as it requires consistent updating and maintenance. Instead of hard-coded data, the only thing you have to maintain is the data itself.
+
+## Wrap Up
+
+Congrats! You have finished the fourth course of Real World Testing with Cypress. If you have completed all four courses, make sure to check out the [Real World Examples](/real-world-examples) as they demonstrate real-world usage of Cypress testing methods, patterns, and workflows.

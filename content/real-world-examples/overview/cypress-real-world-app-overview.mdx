@@ -1,0 +1,58 @@
+# Cypress Real World App Overview
+
+[The Real World App (RWA)](https://github.com/cypress-io/cypress-realworld-app) is an application created by the Cypress team that demonstrates real-world usage of Cypress testing methods, patterns, and workflows. Essentially, this application is a [Venmo](https://venmo.com/) clone. It allows users to sign up for an account, add a bank account and send/receive money between friends.
+
+Throughout this section, we will be using this application to learn a whole host of new Cypress features, testing strategies, and best practices. Before we begin, however, you must clone this repo down onto your machine to get everything set up and working correctly. We have made this process as painless and straightforward as possible.
+
+You can find the repo [here](https://github.com/cypress-io/cypress-realworld-app).
+
+You can clone the repo via the command line with:
+
+```bash
+git clone git@github.com:cypress-io/cypress-realworld-app.git
+```
+
+It might be best to first fork a copy of the repo and then clone the forked version.
+
+Note: The Cypress Real World App uses [Yarn](https://yarnpkg.com/) to manage its dependencies. Please install [Yarn](https://yarnpkg.com/) on your computer as installing with npm may lead to issues running the application.
+
+Once cloned, change into the **cypress-realworld-app** directory and install all of the npm dependencies using Yarn.
+
+```bash
+yarn install
+```
+
+You can then run the application with
+
+```bash
+yarn dev
+```
+
+Once the application is up and running, a browser window should open a new tab to **http://localhost:3000**, where you should see the Sign In page.
+
+![](/images/real-world-examples/overview/cypress-real-world-app-overview/Screen_Shot_2021-06-28_at_11.32.22_AM.png)
+
+Refer to the **README.md** file in the repo for additional information and instructions.
+
+We provide a set of default users in the database, or you can create your own account. We recommend you first log in with one of the default users to see some of the sample data seeded in the app.
+
+You can list out all of the default users with this command.
+
+```bash
+yarn list:dev:users
+```
+
+Every user's password is **s3cret**.
+
+For example, you can use the following username and password to log in.
+
+```bash
+Username: Katharina_Bernier
+Password: s3cret
+```
+
+Once logged in, you will see the main dashboard.
+
+![](/images/real-world-examples/overview/cypress-real-world-app-overview/Screen_Shot_2021-09-16_at_1.40.27_PM.png)
+
+You don't need to spend a ton of time here, but having a general sense of what the app does will be very important for future lessons. Since we will be writing several tests for this application, we need to have a good understanding of what it does so that we can write the proper tests.

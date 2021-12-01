@@ -1,0 +1,92 @@
+# User Setting Form Errors
+
+Before continuing, make sure you have read the [User Settings Overview & Setup](/real-world-examples/user-settings-overview-and-setup) lesson first.
+
+```js
+it("should display user setting form errors", function () {
+  ;["first", "last"].forEach((field) => {
+    cy.getBySelLike(`${field}Name-input`).type("Abc").clear().blur()
+    cy.get(`#user-settings-${field}Name-input-helper-text`)
+      .should("be.visible")
+      .and("contain", `Enter a ${field} name`)
+  })
+
+  cy.getBySelLike("email-input").type("abc").clear().blur()
+  cy.get("#user-settings-email-input-helper-text")
+    .should("be.visible")
+    .and("contain", "Enter an email address")
+
+  cy.getBySelLike("email-input").type("abc@bob.").blur()
+  cy.get("#user-settings-email-input-helper-text")
+    .should("be.visible")
+    .and("contain", "Must contain a valid email address")
+
+  cy.getBySelLike("phoneNumber-input").type("abc").clear().blur()
+  cy.get("#user-settings-phoneNumber-input-helper-text")
+    .should("be.visible")
+    .and("contain", "Enter a phone number")
+
+  cy.getBySelLike("phoneNumber-input").type("615-555-").blur()
+  cy.get("#user-settings-phoneNumber-input-helper-text")
+    .should("be.visible")
+    .and("contain", "Phone number is not valid")
+
+  cy.getBySelLike("submit").should("be.disabled")
+  cy.visualSnapshot("User Settings Form Errors and Submit Disabled")
+})
+```
+
+You can find out more information about the custom Cypress commands used in this test [here](/real-world-examples/custom-cypress-commands).
+
+## First & Last Name Inputs
+
+First, we are looping through an array of two strings to find the firstName and lastName inputs. Remember, [Cypress is just JavaScript](http://localhost:3000/cypress-fundamentals/cypress-is-just-javascript), so we can use `Array.forEach()` to simplify our code and remove duplication.
+
+```js
+;["first", "last"].forEach((field) => {
+  cy.getBySelLike(`${field}Name-input`).type("Abc").clear().blur()
+  cy.get(`#user-settings-${field}Name-input-helper-text`)
+    .should("be.visible")
+    .and("contain", `Enter a ${field} name`)
+})
+```
+
+We then instruct Cypress to use <apiLink apiName="type" displayName=".type()" /> to enter "Abc" into each input, clear the input, and trigger the blur event on the input. We then assert that the validation error is triggered and contains the correct error message.
+
+![](/images/real-world-examples/user-settings/user-setting-form-errors/Screen_Shot_2021-06-29_at_1.29.56_PM.png)
+
+## Email & Phone inputs
+
+Let's finish our test by asserting that the email and phone inputs are also throwing the correct error messages. The code is virtually identical to the last name and first name code above. The only difference is the selector name.
+
+```js
+cy.getBySelLike("email-input").type("abc").clear().blur()
+cy.get("#user-settings-email-input-helper-text")
+  .should("be.visible")
+  .and("contain", "Enter an email address")
+
+cy.getBySelLike("email-input").type("abc@bob.").blur()
+cy.get("#user-settings-email-input-helper-text")
+  .should("be.visible")
+  .and("contain", "Must contain a valid email address")
+
+cy.getBySelLike("phoneNumber-input").type("abc").clear().blur()
+cy.get("#user-settings-phoneNumber-input-helper-text")
+  .should("be.visible")
+  .and("contain", "Enter a phone number")
+
+cy.getBySelLike("phoneNumber-input").type("615-555-").blur()
+cy.get("#user-settings-phoneNumber-input-helper-text")
+  .should("be.visible")
+  .and("contain", "Phone number is not valid")
+```
+
+We have two different assertions for both the email and phone number fields since these two fields can show different error messages depending upon the error.
+
+Finally, we will make sure that the submit button is disabled since there are errors with our form.
+
+```js
+cy.getBySelLike("submit").should("be.disabled")
+```
+
+![](/images/real-world-examples/user-settings/user-setting-form-errors/Screen_Shot_2021-06-29_at_1.37.46_PM.png)

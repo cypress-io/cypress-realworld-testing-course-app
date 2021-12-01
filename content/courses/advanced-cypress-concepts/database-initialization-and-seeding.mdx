@@ -1,0 +1,139 @@
+# Database Initialization & Seeding
+
+Many people struggle with how to manage data necessary for testing. One reason why they struggle is that working with data for testing is often overlooked or forgotten about. In this lesson, we will discuss some strategies on how to work with data in your tests.
+
+## You need a strategy for your data
+
+In the same way that you need to have a testing strategy to determine what to test, you also need a data strategy on how you will work with the data you need for your tests. Here are some things to be thinking about to help you come up with your data strategy.
+
+- Do you have a backend with your test users?
+- Do you need to create test users on the fly?
+- What are the relationships between the various entities in your system/application?
+  - For example, in the Real World App, users need to have a bank account to send and receive payments.
+- Are the database seeds and initialization owned by another team (backend)
+  - The entities in the system and their relationships are complicated; thus, the backend team has scripts and manages the test data
+  - The frontend team is instructed to issue API requests to re-seed the database, create users, delete users, form relationships between users
+- What data needs to come from the database, and which data can be mocked?
+- Do you need to anonymize the data before testing for PII or other personal data safety?
+- Does the test data change between environments like dev, staging, and prod?
+
+## Ways to create data for your tests
+
+There are many ways to seed your database. Below are a few ways we recommend, ordered by our least favorite to our best option.
+
+## Using the UI to create the data you need (during your tests)
+
+This method involves using Cypress to drive the UI to generate the data you need. For example, you could write tests that would allow Cypress to create users via your application UI by filling out a signup form with a generic user specifically for testing purposes.
+
+**Pros**
+
+- The easiest and most straightforward way
+- Confirms that your UI and backend are working correctly
+
+**Cons**
+
+- Take's a long time
+- Your spec files could potentially rely upon each other, which is an anti-pattern
+- Data initialization is less resilient because you don't have a way of knowing if the data exists
+- If your tests fail, your data will not be created, and any subsequent tests that rely upon the creation of this data will also fail.
+
+## Make queries to the database to create the data you need
+
+This method involves writing raw queries, like SQL, to populate your database with the data you need for testing.
+
+**Pros**
+
+- Relies on the backend to manage the data
+- More reliable way to get your data
+- Faster than using the UI to initialize the data, i.e., the method listed above
+- Re-use backend logic, i.e., using an ORM or methods to obtain data from the backend for testing purposes. This is only possible if your front end and backend are in the same repo.
+
+**Cons**
+
+- Requires network interaction to get the data, possible issues with latency
+- Requires maintenance when your data model changes
+- Potential security issues with PII may need to anonymize data
+
+## Making API calls to your backend to provision data
+
+This method involves utilizing special APIs set up to generate the data you need for your tests.
+
+**Pros**
+
+- Call and endpoint with parameters, and the backend creates the entities and returns them
+- Can ensure relationships between entities are established
+- Responsibility of test data is on the backend, not frontend or QA
+- Little to no maintenance on frontend/testing side; completely managed by backend
+
+**Cons**
+
+- Could potentially expose PII
+- May potentially need extra security measures if these endpoints are public-facing
+
+## Database dump or import
+
+This method involves using a SQL dump or an export from one of your databases and then importing the export into another database explicitly used for testing.
+
+**Pros**
+
+- Working with actual data (potentially sanitized)
+- Efficient in that data used to drive tests would be provisioned outside of testing
+- Bulk insert of records
+- Possible for SQL and NoSQL backends, "easier" for SQL
+
+**Cons**
+
+- Depending on entities and where data is stored among regions and databases, i.e., cloud infrastructure, it can become quite complicated.
+- May require DevOps team for setup and deployment.
+
+## Custom scripts (factories) to generate "test" data
+
+**Pros**
+
+- Ultimate control over test data for entities and relationships
+
+**Cons**
+
+- All responsibility for test data is on the frontend/testing team
+- Script maintenance when data model or backend changes
+
+## Creating database seeds with factory scripts
+
+There are many different libraries available to generate dummy test data. [Faker.js](https://www.npmjs.com/package/faker) is a popular library for Node.
+
+Here is an example script for generating fake users with [Faker](https://www.npmjs.com/package/faker).
+
+```js
+// generateSeedUsers.js
+
+import path from "path"
+import fs from "fs"
+import shortid from "shortid"
+import faker from "faker"
+import bcrypt from "bcryptjs"
+import { times } from "lodash"
+
+const passwordHash = bcrypt.hashSync("s3cret", 10)
+
+const createFakeUser = () => ({
+  id: shortid(),
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  username: faker.internet.userName(),
+  password: passwordHash,
+  email: faker.internet.email(),
+  createdAt: faker.date.past(),
+  modifiedAt: faker.date.recent(),
+})
+
+export const createSeedUsers = (numberOfUsers) =>
+  times(numberOfUsers, () => createFakeUser())
+
+export const saveUsersSeed = (numberOfUsers) => {
+  const seedUsers = createSeedUsers(numberOfUsers)
+  // write seed users to seedUsers.json
+  fs.writeFile(path.join(process.cwd(), "seedUsers.json"), seedUsers)
+}
+```
+
+In this example, we have a simple script that creates fake users and then writes those users to a **.json** file. You could then use this **.json** file as a fixture to drive some of your tests, or you could use this script to write the users to your test database, etc.

@@ -1,0 +1,13 @@
+# Cypress runs in the browser
+
+Cypress's [architecture](https://docs.cypress.io/guides/overview/key-differences#Architecture), unlike most other testing tools, runs _inside_ of the browser. This means that your tests are being executed in the same environment as your application. This allows Cypress to detect all events that are fired by your browser and give it real native access to everything within your tests.
+
+Most other testing tools (like Selenium) run outside of the browser and execute remote commands across the network to control the browser. Cypress is the exact opposite!
+
+Since Cypress is running in the browser, it also operates at the network layer by reading and altering web traffic on the fly. Cypress can therefore modify everything coming in and out of the browser, which will allow you to test your application in ways no other testing tool can. This also gives it native access to things like the **window** object, **document**, DOM elements, service workers, etc.
+
+This distinction can aid in many ways, including setting up or modifying frontend state libraries such as Redux or MobX directly from your Cypress tests.
+
+Anything the browser can access, Cypress can as well.
+
+This is not without [trade-offs](https://docs.cypress.io/guides/references/trade-offs#Inside-the-browser), however.

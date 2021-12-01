@@ -1,0 +1,257 @@
+# Installing Cypress and writing our first test
+
+## Installing Cypress
+
+Before we can begin writing our tests, we first need to install Cypress into our project. You can find more details about the installation process [here](https://docs.cypress.io/guides/getting-started/installing-cypress).
+
+We can add Cypress to our project with the following command:
+
+```bash
+yarn add cypress -D
+```
+
+Next we will add a custom npm script so we can launch Cypress easily. The entire "scripts" object within **package.json** should look like this:
+
+```json
+"scripts": {
+  "cypress:open": "cypress open",
+  "start": "http-server -p 8888 -c-1"
+},
+```
+
+Before we run our new script, make sure also to have the application running in a separate terminal window. It is vital to have the application up and running as Cypress cannot execute any tests without it.
+
+If you are using VSCode, you can open the built-in terminal with (Ctrl+` on Mac/Win). Or you can click on View > Terminal in the menu at the top.
+
+In your terminal enter the following command to start the app.
+
+```bash
+yarn start
+```
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-09-17_at_10.09.16_AM.png)
+
+Let's now start Cypress so that it can create the directories and files within our project.
+
+```bash
+yarn cypress:open
+```
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-09-17_at_10.09.40_AM.png)
+
+Make sure to keep Cypress running through the duration of this lesson.
+
+When Cypress first launches, it will display some helpful information on a screen like this:
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_9.47.49_AM.png)
+
+Click on the green "Ok, got it!" button to close the modal.
+
+Cypress automatically creates several example spec files for you. If this is your first time using Cypress, we highly recommend that you click on some of them to see the Cypress test runner in action. You can find them within **cypress/integration/examples**.
+
+Don't worry if you don't understand them yet or feel a bit overwhelmed. We will be writing our own tests shortly, and we will explain every line of code along the way.
+
+## Selecting a browser
+
+You can select which browser Cypress should use in the upper right-hand corner. Cypress will automatically detect all of the installed browsers on your machine, so choose whichever you would like for it to use.
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_9.56.26_AM.png)
+
+## Writing our first test
+
+Now that we have Cypress installed and working let's write our first test for our todo application.
+
+Create a new file called **app.spec.js** within the **cypress/integration** directory.
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_10.02.58_AM.png)
+
+Inside that file, we will use the `describe()` function to help us organize our tests. Let's use it to create a describe block called "React TodoMVC."
+
+```js
+describe("React TodoMVC", () => {})
+```
+
+Within that describe block, we will write our tests using the `it()` function. For our first test, let's write a test to assert that we can add a single todo.
+
+```js
+describe("React TodoMVC", () => {
+  it("adds a single todo", () => {})
+})
+```
+
+Within the body of our `it()` function is where we write the code necessary for our test to run. Before we begin to do that, let's take a step back and think through all of the steps necessary to add a single todo.
+
+Open the app in your browser and note all of the steps you need to perform to add a single todo.
+
+1. We need to focus on the input field.
+2. We need to enter in the name of our todo.
+3. We need to press the enter key to add our todo.
+
+Now let's write out these steps into our test.
+
+Before having Cypress click into the input field, we first need to grab the input field element from the [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model), so Cypress knows which element to click.
+
+If we inspect the element with our browser's dev tools, we will notice that the input field has a class of **new-todo** .
+
+```js
+<input class="new-todo" placeholder="What needs to be done?" data-reactid=".0.0.1">
+```
+
+Therefore we can <apiLink apiName="get" displayName="cy.get()" /> this element like so:
+
+```js
+cy.get(".new-todo")
+```
+
+So our entire test file should now look like this:
+
+```js
+describe("React TodoMVC", () => {
+  it("adds a single todo", () => {
+    cy.get(".new-todo")
+  })
+})
+```
+
+When Cypress launches, you will see several example files, so toggle the small arrow to the left of the **examples** folder to collapse that folder. You can also click the "COLLAPSE ALL" button to collapse everything.
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_10.20.05_AM.png)
+
+Now click on the **app.spec.js** file to launch the file containing our test.
+
+You should see an error like this:
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_10.20.58_AM.png)
+
+Cypress is telling us that it is unable to <apiLink apiName="get" displayName="cy.get()" /> our input element with the class of **.new-todo**. If you look at the right side of Cypress, you will see a message that says, "This is the default blank page," with some hints about what to do. This is just a blank page that Cypress opens when it doesn't know where to go, but we want Cypress to open our todo application. Let's go back to our test and tell Cypress how to navigate to our app.
+
+We can use the <apiLink apiName="visit" displayName="cy.visit()" /> method to tell Cypress which URL to visit:
+
+```js
+describe("React TodoMVC", () => {
+  it("adds a single todo", () => {
+    cy.visit("http://localhost:8888")
+    cy.get(".new-todo")
+  })
+})
+```
+
+Cypress provides an excellent developer experience in that each time we save our test file, the runner will automatically re-run all of our tests. So after saving our file, you should now see the following:
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_10.25.30_AM.png)
+
+The green checkmark in the Cypress Command Log, on the left side of the screen, means that Cypress has successfully found the input with the class of **new-todo**.
+
+Next, we need to enter the name of our todo. We can do that using the <apiLink apiName="type" displayName="cy.type()" /> method and passing in a string of what we would like Cypress to type into the input.
+
+```js
+cy.get(".new-todo").type("Buy Milk")
+```
+
+After saving our file, Cypress will re-run our test, and you should see the following:
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_10.27.18_AM.png)
+
+Next, we need to simulate the user pressing the **enter** key to add the todo.
+
+```js
+cy.get(".new-todo").type("Buy Milk{enter}")
+```
+
+By adding `{enter}` inside of our <apiLink apiName="type" displayName="cy.type()" /> function, Cypress will press the enter key after it has finished typing "Buy Milk"
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_10.29.13_AM.png)
+
+So our entire test file should like this so far:
+
+```js
+describe("React TodoMVC", () => {
+  it("adds a single todo", () => {
+    cy.visit("http://localhost:8888")
+    cy.get(".new-todo").type("Buy Milk{enter}")
+  })
+})
+```
+
+With just a few lines of code, we have written our first test that confirms that we can add a single todo to our application.
+
+Before we wrap this up, however, I want you to think about this question, "How do we know only a single todo has been added?" Our test confirms that we can add a single todo, but how do we know for sure that only a single todo exists? We need a way to assert that only a single todo can be added. Let's see how we can do this.
+
+First, let's use our dev tools to inspect our newly added todo.
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_10.37.43_AM.png)
+
+We can see that our todos are added as `<li>` elements. Knowing this, we can make an assertion that only a single `<li>` element exists within our todo app like so:
+
+```js
+describe("React TodoMVC", () => {
+  it("adds a single todo", () => {
+    cy.visit("http://localhost:8888")
+    cy.get(".new-todo").type("Buy Milk{enter}")
+    cy.get(".todo-list li").should("have.length", 1)
+  })
+})
+```
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_10.39.45_AM.png)
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_10.40.23_AM.png)
+
+Let's break down what this line of code is doing.
+
+```js
+cy.get(".todo-list li")
+```
+
+First, we are getting all of the `<li>` child elements of the **.todo-list** element. This will return an array of all of the child elements that it finds, which in our case should only be 1.
+
+We then assert that this array should have a length of 1 element.
+
+```js
+cy.get(".todo-list li").should("have.length", 1)
+```
+
+Let's update our test to add two todos to see if our assertion now fails.
+
+```js
+describe("React TodoMVC", () => {
+  it("adds a single todo", () => {
+    cy.visit("http://localhost:8888")
+    cy.get(".new-todo").type("Buy Milk{enter}")
+    cy.get(".new-todo").type("Pay Rent{enter}")
+    cy.get(".todo-list li").should("have.length", 1)
+  })
+})
+```
+
+Our assertion fails because we have more than one todo now.
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_10.48.50_AM.png)
+
+We can also simplify this code by chaining both of our <apiLink apiName="type" displayName="cy.type()" /> functions together like so:
+
+```js
+describe("React TodoMVC", () => {
+  it("adds a single todo", () => {
+    cy.visit("http://localhost:8888")
+    cy.get(".new-todo").type("Buy Milk{enter}").type("Pay Rent{enter}")
+    cy.get(".todo-list li").should("have.length", 1)
+  })
+})
+```
+
+This is just a handy way of not getting the same element multiple times, and it also cleans up our test a little bit.
+
+Now let's update our test so that we are only adding a single todo and everything passes.
+
+```js
+describe("React TodoMVC", () => {
+  it("adds a single todo", () => {
+    cy.visit("http://localhost:8888")
+    cy.get(".new-todo").type("Buy Milk{enter}")
+    cy.get(".todo-list li").should("have.length", 1)
+  })
+})
+```
+
+![](/images/testing-your-first-application/installing-cypress-and-writing-our-first-test/Screen_Shot_2021-06-25_at_10.51.41_AM.png)

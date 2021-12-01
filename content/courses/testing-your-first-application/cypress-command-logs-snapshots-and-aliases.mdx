@@ -1,0 +1,189 @@
+# Cypress Command Logs, Snapshots and Aliases
+
+When writing custom [Cypress commands](https://docs.cypress.io/api/cypress-api/custom-commands), it is often helpful to output custom messages and information to the test runner with logging. Since Cypress commands are an abstraction, having proper logging reminds you of the context and purpose of the custom command.
+
+To learn how to utilize `Cypress.log()`, we will update our **createDefaultTodos** command to log some helpful information.
+
+Before we do that, let's update our test file to only run our **adds three todos** test. You can easily do this by appending `.only()` to our test, like so:
+
+```js
+it.only("adds three todos", () => {
+  cy.createDefaultTodos()
+  cy.get(".todo-list li").should("have.length", 3)
+})
+```
+
+This will tell Cypress only to execute this test in our file. You can add `.only()` to multiple tests if you like.
+
+Save the file, and now Cypress is only running this specific test.
+
+We are going to be updating our command by adding the following to it:
+
+```js
+Cypress.log({
+  name: "create default todos",
+  consoleProps() {
+    return {
+      "Inserted Todos": [TODO_ITEM_ONE, TODO_ITEM_TWO, TODO_ITEM_THREE],
+    }
+  },
+})
+```
+
+Before we do, however, let's go over what this is doing.
+
+First, we are passing an object to `Cypress.log()` with a name and `consoleProps()`. The `consoleProps()` function allows us to create our custom message that will be printed to our browser's console whenever we click on it within the test runner. We will see this in action shortly.
+
+Now let's update our custom command in **cypress/support/commands.js** , with our log.
+
+```js
+Cypress.Commands.add("createDefaultTodos", () => {
+  const TODO_ITEM_ONE = "Buy Milk"
+  const TODO_ITEM_TWO = "Pay Rent"
+  const TODO_ITEM_THREE = "Pickup Dry Cleaning"
+
+  Cypress.log({
+    name: "create default todos",
+    consoleProps() {
+      return {
+        "Inserted Todos": [TODO_ITEM_ONE, TODO_ITEM_TWO, TODO_ITEM_THREE],
+      }
+    },
+  })
+
+  cy.get(".new-todo")
+    .type(`${TODO_ITEM_ONE}{enter}`)
+    .type(`${TODO_ITEM_TWO}{enter}`)
+    .type(`${TODO_ITEM_THREE}{enter}`)
+})
+```
+
+After saving the file, you should see the following in the test runner:
+
+![](/images/testing-your-first-application/cypress-command-logs-snapshots-and-aliases/Screen_Shot_2021-06-28_at_10.18.03_AM.png)
+
+![](/images/testing-your-first-application/cypress-command-logs-snapshots-and-aliases/Screen_Shot_2021-06-28_at_10.19.14_AM.png)
+
+You will see the name we passed to `Cypress.log()` at the top of our test body, and after clicking on it, you should see our custom message printed out to the dev console.
+
+![](/images/testing-your-first-application/cypress-command-logs-snapshots-and-aliases/Screen_Shot_2021-06-28_at_10.20.24_AM.png)
+
+This is a handy way of providing additional information and context for what our custom command is doing.
+
+If you look on the left hand side of the runner, within the test body, you will see some output that we don't actually need anymore. For instance, we don't need the runner to log out each time it types a new todo. We are already providing this information in our custom log message. We can prevent this output by passing `{ log: false }` like so:
+
+```js
+cy.get(".new-todo", { log: false })
+  .type(`${TODO_ITEM_ONE}{enter}`, { log: false })
+  .type(`${TODO_ITEM_TWO}{enter}`, { log: false })
+  .type(`${TODO_ITEM_THREE}{enter}`, { log: false })
+```
+
+Save the file, and now the output should be much cleaner.
+
+![](/images/testing-your-first-application/cypress-command-logs-snapshots-and-aliases/Screen_Shot_2021-06-28_at_10.25.26_AM.png)
+
+## Aliases
+
+[Aliases in Cypress](https://docs.cypress.io/guides/core-concepts/variables-and-aliases) provide a way for you to reference something later on in your test. You can think of it as a variable where you store something to use later on. Within our custom command to **createDefaultTodos**, we can return our newly created todos from the command, which we can then access as an alias within our test. Aliases can be used for all sorts of things, but in our case, we want to alias the todo elements or `<li>` from the DOM. This will make more sense when we break down the code involved and update our test to use this alias.
+
+The first thing we want to do is store our newly created log into a variable.
+
+```js
+let cmd = Cypress.log({
+  name: "create default todos",
+  consoleProps() {
+    return {
+      "Inserted Todos": [TODO_ITEM_ONE, TODO_ITEM_TWO, TODO_ITEM_THREE],
+    }
+  },
+})
+```
+
+Then, we get all of the **.todo-list** `<li>` elements, which are the three todos. We are also turning off logging for <apiLink apiName="get" displayName="cy.get()" /> in the test runner.
+
+```js
+cy.get(".todo-list li", { log: false })
+```
+
+Next, we are putting those elements
+into a variable called `$listItems` which we then `.set()` on our `Cypress.log()`
+. Finally, we use <apiLink apiName="end" displayName="cy.end()" /> to let Cypress
+know that our command is finished.
+
+```js
+.then(function ($listItems) {
+      cmd.set({ el: listItems }).snapshot().end()
+    })
+```
+
+The entire command looks like this:
+
+```js
+Cypress.Commands.add("createDefaultTodos", () => {
+  const TODO_ITEM_ONE = "Buy Milk"
+  const TODO_ITEM_TWO = "Pay Rent"
+  const TODO_ITEM_THREE = "Pickup Dry Cleaning"
+
+  let cmd = Cypress.log({
+    name: "create default todos",
+    consoleProps() {
+      return {
+        "Inserted Todos": [TODO_ITEM_ONE, TODO_ITEM_TWO, TODO_ITEM_THREE],
+      }
+    },
+  })
+
+  cy.get(".new-todo", { log: false })
+    .type(`${TODO_ITEM_ONE}{enter}`, { log: false })
+    .type(`${TODO_ITEM_TWO}{enter}`, { log: false })
+    .type(`${TODO_ITEM_THREE}{enter}`, { log: false })
+
+  cy.get(".todo-list li", { log: false }).then((listItems) => {
+    cmd.set({ el: listItems }).snapshot().end()
+  })
+})
+```
+
+Our test should still pass after saving the file, but nothing has changed, as we are not using our todo items as an alias. Let's update one of our tests to take advantage of this alias.
+
+We will be updating our test called **adds three todos** like so:
+
+```js
+it.only("adds three todos", () => {
+  cy.createDefaultTodos().as("todos")
+  cy.get("@todos").should("have.length", 3)
+})
+```
+
+After saving the file, our test is still passing, and the runner has also logged our new alias.
+
+![](/images/testing-your-first-application/cypress-command-logs-snapshots-and-aliases/Screen_Shot_2021-06-28_at_10.48.45_AM.png)
+
+Now the test runner states explicitly that our <apiLink apiName="get" displayName="cy.get()" /> is getting **@todos** which is the alias we just created.
+
+## Snapshot
+
+Before we wrap up this lesson, we would like to introduce you to the `.snapshot()` method. Currently, when you click on our custom **createDefaultTodos** command in the test runner, you will see the following.
+
+![](/images/testing-your-first-application/cypress-command-logs-snapshots-and-aliases/Screen_Shot_2021-06-28_at_10.52.41_AM.png)
+
+There isn't any UI on the right-hand side, even though the runner says "DOM Snapshot (pinned)" at the bottom. The reason being is that we have not told Cypress to specifically take a snapshot of the DOM in our custom command. We can easily update our command like so to get what we need.
+
+```js
+cy.get(".todo-list li", { log: false }).then((listItems) => {
+  cmd.set({ el: listItems }).snapshot().end()
+})
+```
+
+After saving the file, you should now see the following:
+
+![](/images/testing-your-first-application/cypress-command-logs-snapshots-and-aliases/Screen_Shot_2021-06-28_at_10.54.26_AM.png)
+
+Next to the "DOM Snapshot (pinned)," you will see two buttons with a 1 and 2, respectively. Button 1 is selected by default and doesn't display anything. However, clicking on button two will show a snapshot of the DOM with our three newly created todos.
+
+![](/images/testing-your-first-application/cypress-command-logs-snapshots-and-aliases/Screen_Shot_2021-06-28_at_10.54.29_AM.png)
+
+## Practice
+
+Now that you have seen how aliases work, try it on your own. Update the **should append new items to the bottom of the list** test to use an alias as we did in the **adds three todos** test.

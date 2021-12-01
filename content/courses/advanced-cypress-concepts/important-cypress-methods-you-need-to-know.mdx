@@ -1,0 +1,96 @@
+# Important Cypress Methods You Need to Know
+
+Cypress has a lot of [methods & commands](https://docs.cypress.io/api/table-of-contents). While our documentation covers them in great detail, it can be overwhelming trying to learn them all. This lesson will highlight some of the most important methods that we think you should know. These are not methods you will use all of the time, but simply knowing they exist will be incredibly helpful as you begin to write more complicated tests.
+
+## .its()
+
+Get a property's value on the previously yielded subject.
+
+`.its()` is a handy method when you want to get the property off of something. For example if you want to make an assertion against an array.
+
+```js
+cy.wrap(["Wai Yan", "Yu"]).its(1).should("eq", "Yu") // true
+```
+
+Or maybe you want to get the property from an object and make an assertion.
+
+```js
+cy.wrap({ age: 52 }).its("age").should("eq", 52) // true
+```
+
+In the example in the Invoke section above, we are using <apiLink apiName="its" displayName=".its()" /> to grab the `results` from the `@publicTransactions` alias, which is an intercepted network request.
+
+```js
+it("first five items belong to contacts in public feed", function () {
+  // ...
+
+  cy.wait("@publicTransactions")
+  .its("response.body.results")
+  .invoke("slice", 0, 5)
+```
+
+By using <apiLink apiName="its" displayName=".its()" /> we can get access to the `results` array which allows us to call `.invoke()` to perform `.slice()` on it.
+
+`.its()` is a very handy method and will become a useful tool in your "Cypress tool belt." You can find out more about it in our [API docs page](https://docs.cypress.io/api/commands/its).
+
+## .invoke()
+
+Invoke a function on the previously yielded subject.
+
+[Cypress is just JavaScript](/cypress-fundamentals/cypress-is-just-javascript), and the <apiLink apiName="invoke" displayName="cy.invoke()" /> method allows you to call JS functions on JS data types.
+
+In the example below, we are invoking the `Array.slice()` function on the response data returned from an aliased intercept.
+
+```js
+beforeEach(() => {
+  cy.intercept("GET", "/users").as("users")
+})
+
+it("slices the users returned from /users endpoint", () => {
+  cy.wait("@users").its("response.body.results").invoke("slice", 0, 5)
+  // ...
+})
+```
+
+Check out our [API docs page](https://docs.cypress.io/api/commands/invoke) for more info on <apiLink apiName="intercept" displayName="cy.intercept()" />
+
+## .request()
+
+Make an HTTP request.
+
+`.request()` is a helpful method anytime you need to make an HTTP request within your tests and perform expectations against it.
+
+```js
+cy.request("POST", "http://localhost:8888/users/admin", { name: "Jane" }).then(
+  (response) => {
+    // response.body is automatically serialized into JSON
+    expect(response.body).to.have.property("name", "Jane") // true
+  }
+)
+```
+
+We make extensive use of <apiLink apiName="request" displayName="cy.request()" /> in our [API tests](https://github.com/cypress-io/cypress-realworld-app/tree/develop/cypress/tests/api) within the [Real World App (RWA)](https://github.com/cypress-io/cypress-realworld-app).
+
+## .within()
+
+Scopes all subsequent Cypress commands to within an element. Useful when working within a particular group of elements such as a `<form>`.
+
+When you are working with elements, you need to drill down into its children, grandchildren, etc. You can use <apiLink apiName="within" displayName=".within()" /> to limit the scope of Cypress commands to within a specific element. For example.
+
+```js
+it("ensures the section lesson exists", () => {
+  cy.getBySel("section-steps").within(() => {
+    cy.getBySel("lesson-complete-0").should("exist")
+  })
+})
+```
+
+You can find out more about `.within()` on our [API docs page](https://docs.cypress.io/api/commands/within).
+
+## Practice
+
+If you would like to practice using some of these Cypress methods, we have created a special repo which can be found [here](https://github.com/cypress-io/cypress-realworld-testing-blog). The installation instructions are located in the **README.md** file.
+
+The practice file you are looking for can be found in **cypress/integration/Practice/cypress-methods.spec.js**.
+
+Should you get stuck or need some help, all of the answers are provided within **cypress/integration/Answers/cypress-methods.spec.js**

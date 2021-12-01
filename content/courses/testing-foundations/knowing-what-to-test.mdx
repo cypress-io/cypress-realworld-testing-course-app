@@ -1,0 +1,25 @@
+# Knowing What to Test
+
+One of the most difficult challenges when first learning how to write tests is understanding what you should be testing. If you already have a large application in production without any tests, how would you write tests for it? While each application is unique with its own set of features, functionality, technical debt, etc., here are some ways to help you determine what to test.
+
+## User Journeys
+
+If you are trying to test an already existing application, we recommend that you begin by writing tests for your application's most "mission-critical" pieces. By "mission-critical," we mean any portions of your application that cannot go down or break. For example, login/authentication, purchasing a product, processing a credit card, sign-up forms, etc. We recommend that your first suite of tests should be for these portions of your application and that they should be end-to-end tests.
+
+Now that you have identified the areas of your application that are most important, how exactly should you write your tests? We recommend writing tests for "user journeys." User journeys are the essential paths in which a user of your application takes.
+
+For example, let's say you have an e-commerce application. A user will first search for a product, add it to their shopping cart, fill out their shipping info, enter payment information, and finally purchase it. This entire flow a user takes from first finding a product to ultimately buying it is a user journey. The entire user journey should also be tested with a single test. The reason why it should be a single test, rather than several tests, which test each step in isolation, is so that you can make sure that all the pieces within your application are working correctly. Testing user journeys also tests all of the layers within your tech stack. You are testing the front-end and the back-end, the database layer, networking/API layers, etc.
+
+With one test, you are testing the most critical pieces of your application, which will ultimately provide you with confidence that your application is behaving as it should.
+
+## New Features
+
+When you are implementing a new feature, a helpful technique for writing tests for that feature is to first start with the end goal in mind. What exactly does this feature need to do? What problem does it solve? Once you understand that, you can break the feature down into small incremental steps, all of which can be translated into tests.
+
+Now that you have a suite of tests for each step, you can write the code necessary to make each step pass. By doing this, you can also easily refactor this code later on as you will have the confidence from the tests that you have not broken anything during the refactor. If you have, your tests will fail.
+
+## Bugs
+
+It is highly recommended that you write tests around any bug that appears in your application. A good approach is to first write a failing test around the bug before fixing it. Once the bug has been fixed your test will pass, which verifies that your new code has eliminated the bug.
+
+This way, your test will help to ensure that this bug will never rear its ugly head in the future.

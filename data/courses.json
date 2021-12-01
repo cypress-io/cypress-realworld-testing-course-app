@@ -1,0 +1,386 @@
+{
+  "testing-your-first-application": {
+    "title": "Testing Your First Application",
+    "slug": "testing-your-first-application",
+    "description": "How to test a simple TodoMVC app with Cypress.",
+    "image": "/images/courses/todo-mvc.png",
+    "learnFeatures": [
+      "How to write Cypress tests",
+      "How to install and use Cypress",
+      "How to create custom Cypress commands"
+    ],
+    "lessons": [{
+        "title": "TodoMVC App Install and Overview",
+        "slug": "todomvc-app-install-and-overview",
+        "description": "How to install the TodoMVC application and get it up and running."
+      },
+      {
+        "title": "Installing Cypress and writing our first test",
+        "slug": "installing-cypress-and-writing-our-first-test",
+        "description": "How to install Cypress and write your first end to end test."
+      },
+      {
+        "title": "Setting up Data Before Each Test",
+        "slug": "setting-up-data-before-each-test",
+        "description": "How to utilize the beforeEach hook to setup data before each test."
+      },
+      {
+        "title": "How to use Cypress Commands",
+        "slug": "how-to-use-cypress-commands",
+        "description": "How to use custom Cypress commands to simplify your test code."
+      },
+      {
+        "title": "Cypress Command Logs, Snapshots and Aliases",
+        "slug": "cypress-command-logs-snapshots-and-aliases",
+        "description": "How Cypress Command Logs, Snapshots and Aliases work."
+      },
+      {
+        "title": "Testing what isn't there",
+        "slug": "testing-what-isnt-there",
+        "description": "Learn how to test the 'Unhappy Paths' by ensuring certain elements do not exist on the page."
+      }
+    ]
+  },
+  "testing-foundations": {
+    "title": "Testing Foundations",
+    "slug": "testing-foundations",
+    "description": "The fundamentals you need to write great tests.",
+    "image": "/images/courses/cypress-features.jpg",
+    "learnFeatures": [
+      "Learn what to test and why",
+      "Arrange, Act, Assert",
+      "The Difference between Unit, Integration and E2E tests"
+    ],
+    "lessons": [{
+        "title": "Testing is a Mindset",
+        "slug": "testing-is-a-mindset",
+        "description": "Understand the testing mindset that is necessary before you begin writing tests.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "Even if you have a QA team, their input is not necessary for automated tests?",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 1
+        }]
+      },
+      {
+        "title": "Knowing What to Test",
+        "slug": "knowing-what-to-test",
+        "description": "How to test user journeys, new features and bugs within your application.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "What is the best way to test the most critical pieces of your application?",
+          "answers": [
+            "User Journeys",
+            "New Features",
+            "Bugs",
+            "Components"
+          ],
+          "correctAnswerIndex": 0
+        }]
+      },
+      {
+        "title": "Manual vs Automated Testing",
+        "slug": "manual-vs-automated-testing",
+        "description": "The differences between automated testing and manual testing.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "Modern software development teams are integrating testing earlier in the software development lifecycle?",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 0
+        }]
+      },
+      {
+        "title": "Who should be responsible for testing?",
+        "slug": "who-should-be-responsible-for-testing",
+        "description": "In order to ship reliable, high quality software, testing should be everyone's responsibility and should be at the thought process of the entire team at the start of a project.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "Testing is everyone's responsibility",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 0
+        }]
+      },
+      {
+        "title": "The Testing Pyramid",
+        "slug": "the-testing-pyramid",
+        "description": "The difference between unit, integration and end to end tests.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "When writing a unit test to test a function, you are primarily concerned with testing the inner logic of that function?",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 1
+        }]
+      }
+    ]
+  },
+  "cypress-fundamentals": {
+    "title": "Cypress Fundamentals",
+    "slug": "cypress-fundamentals",
+    "description": "The aspects of Cypress you must know.",
+    "image": "/images/courses/cypress-rwa.png",
+    "learnFeatures": [
+      "How to use Aliases",
+      "How to chain methods and assertions together",
+      "How Cypress works 'under the hood'"
+    ],
+    "lessons": [
+      {
+        "title": "How to Write a Test",
+        "slug": "how-to-write-a-test",
+        "description": "How to write tests using the Arrange, Act and Assert pattern.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "What is a good pattern for writing tests?",
+          "answers": [
+            "Assert, Act, Arrange",
+            "Arrange, Assert, Act",
+            "Arrange, Act, Assert",
+            "Act, Assert, Arrange"
+          ],
+          "correctAnswerIndex": 2
+        }]
+      },{
+        "title": "Cypress Runs in the Browser",
+        "slug": "cypress-runs-in-the-browser",
+        "description": "Cypress's architecture, unlike most other testing tools, runs inside of the browser. This means that your tests are being executed in the same environment as your application.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "If it runs in the browser, Cypress has access to it?",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 0
+        }]
+      },
+      {
+        "title": "Command Chaining",
+        "slug": "command-chaining",
+        "description": "It's important to understand the mechanism Cypress uses to chain commands together. It manages a Promise chain on your behalf...",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "What does Cypress yield to the next command in the chain?",
+          "answers": [
+            "Object",
+            "Variable",
+            "Context",
+            "Subject"
+          ],
+          "correctAnswerIndex": 3
+        }]
+      },
+      {
+        "title": "Understanding the Asynchronous Nature of Cypress",
+        "slug": "understanding-the-asynchronous-nature-of-cypress",
+        "description": "How Cypress handles things asynchronously is often misunderstood by developers and can lead to issues and confusion later on, especially when trying to debug your tests.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "Cypress commands return their subjects?",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 1
+        }]
+      },
+      {
+        "title": "Waiting and Retry-ability",
+        "slug": "waiting-and-retry-ability",
+        "description": "Cypress will automatically wait until an element becomes visible, becomes enabled, or when another element is no longer covering an element.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "Cypress will automatically wait until an element becomes visible, becomes enabled, or when another element is no longer covering an element.",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 0
+        }]
+      },
+      {
+        "title": "Cypress UI Overview",
+        "slug": "cypress-ui-overview",
+        "description": "An overview of the Cypress test runner UI.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "The selector playground allows you to copy the cypress command to cy.get() an element in your app",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 0
+        }]
+      },
+      {
+        "title": "How to Debug Failing Tests",
+        "slug": "how-to-debug-failing-tests",
+        "description": "Best practices and tips on how to debug failing tests.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "The Cypress Test Runner, ie the UI, will automatically take screenshots and videos of failing tests.",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 1
+        }]
+      },
+      {
+        "title": "Cypress is just JavaScript",
+        "slug": "cypress-is-just-javascript",
+        "description": "Cypress is just JavaScript which means you can leverage 3rd party libraries and other language features within your tests.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "Using lots of variables in your tests is a good idea since Cypress is just JavaScript.",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 1
+        }]
+      }
+    ]
+  },
+  "advanced-cypress-concepts": {
+    "title": "Advanced Cypress Concepts",
+    "slug": "advanced-cypress-concepts",
+    "description": "Some of the more advanced concepts in Cypress that take your tests to the next level.",
+    "image": "/images/courses/pay-app.png",
+    "learnFeatures": [
+      "How to debug test failures",
+      "Database initialization and seeding",
+      "How to test network requests"
+    ],
+    "lessons": [{
+        "title": "Database Initialization and Seeding",
+        "slug": "database-initialization-and-seeding",
+        "description": "In the same way that you need to have a testing strategy to determine what to test, you also need a data strategy on how you will work with the data you need for your tests.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "The best way to create the data you need for your tests is via the UI.",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 1
+        }]
+      },
+      {
+        "title": "Running Cypress in CI",
+        "slug": "running-cypress-in-ci",
+        "description": "How to run your Cypress tests in your favorite Continuous Integration providers.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "The Cypress dashboard provides automatic parallelization and load balancing for your tests.",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 0
+        }]
+      },
+      {
+        "title": "Intercepting Network Requests",
+        "slug": "intercepting-network-requests",
+        "description": "How to intercept network requests with Cypress.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "How would you wait on the following alias cy.intercept('POST', '/users').as('signup');",
+          "answers": [
+            "cy.wait('signup')",
+            "cy.wait('@signup')",
+            "cy.wait('#signup')",
+            "cy.wait('&signup')"
+          ],
+          "correctAnswerIndex": 1
+        }]
+      },
+      {
+        "title": "Integration and API Tests",
+        "slug": "integration-and-api-tests",
+        "description": "How to use Cypress for your API and integration tests.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "Cypress provides a great developer experience for testing API's",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 0
+        }]
+      },
+      {
+        "title": "Building the Right Cypress Commands",
+        "slug": "building-the-right-cypress-commands",
+        "description": "Best practices and methods for writing custom Cypress commands.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "You should be thinking in abstractions before you begin writing your tests",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 1
+        }]
+      },
+      {
+        "title": "How to Test Various Browsers and Viewports",
+        "slug": "how-to-test-various-browsers-and-viewports",
+        "description": "How to run your Cypress tests in different browsers and various viewports.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "Which browser can Cypress test?",
+          "answers": [
+            "Chrome",
+            "Firefox",
+            "Edge",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3
+        }]
+      },
+      {
+        "title": "Important Cypress Methods You Need to Know",
+        "slug": "important-cypress-methods-you-need-to-know",
+        "description": "Some of the most useful Cypress methods available that few people know about.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "Which Cypress method gets a property's value on the previously yielded subject.",
+          "answers": [
+            "invoke",
+            "within",
+            "its",
+            "request"
+          ],
+          "correctAnswerIndex": 2
+        }]
+      },
+      {
+        "title": "Using Data to Build Dynamic Tests",
+        "slug": "using-data-to-build-dynamic-tests",
+        "description": "How to use real data to drive your tests.",
+        "challenges": [{
+          "challengeType": "multiple-choice",
+          "question": "It is best to use hard-coded data for your tests.",
+          "answers": [
+            "True",
+            "False"
+          ],
+          "correctAnswerIndex": 1
+        }]
+      }
+    ]
+  }
+}

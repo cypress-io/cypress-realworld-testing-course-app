@@ -1,0 +1,43 @@
+# Our Approach to Testing the RWA
+
+Understanding how to test an application's various paths (or components) is the most challenging part of testing. As the Real World App was being developed, we used multiple testing strategies throughout the development process. We recommend applying these strategies as they provide proven layers of testing at the right time while building your application.
+
+## Which types of tests and why
+
+Seeing how the [RWA](https://github.com/cypress-io/cypress-realworld-app) is a full-stack application, we needed to write tests that would test both the back-end and the front-end. As the back-end was being developed, we wrote unit tests and integration tests to ensure that APIs worked as expected. As the front-end was being developed, we wrote end-to-end tests with Cypress to ensure the UI worked.
+
+It is often best to write unit tests and integration tests during the development of back-end's since you do not have a UI to interact with yet. Once the UI is complete, you can add E2E tests to test the entire stack from the database layer through the network layer to the UI.
+
+## Defining our Testing Strategy
+
+![](/images/real-world-examples/overview/our-approach-to-testing-the-real-world-app/Pay_App.png)
+
+Before writing any E2E tests, we defined our testing strategy that visually documented the application's most important areas for test coverage. Our recommended approach is first to document all the application screens, taking notes on the functionality that needs to be tested on each.
+
+Thinking through your application upfront makes writing your tests much more straightforward. It also allows you to break up the work amongst various developers, tickets, etc. Visual documentation like the example above acts like a kind of "map," which helps to provide a high-level overview of your application's testing surface.
+
+## User Journeys
+
+User Journeys are the paths users take throughout your application that lead to the most valuable tests you can write.
+
+After documenting the functionality from each view/screen, we documented the various user journeys a user of our application could take.
+
+For example, we have a single test that creates a new account, logs in to that new account create a new bank account, and logs out. With a single test, we are testing some of the most critical functionality of our app and the database, APIs, and UI that makes it all possible.
+
+Testing user journeys is incredibly important and powerful. We will walk you through some examples in upcoming lessons.
+
+## Testing Strategies for teams
+
+Most companies have dedicated back-end and front-end teams, and often development teams do not know how to test the areas they are responsible for. For example, how is the front-end team supposed to test the UI if the APIs being developed by the back-end team are not ready yet?
+
+A solution for this is to have your back-end team provide you with a sample API payload which you can then mock to write your tests against. Then when those APIs are ready, you remove the mock and test against the actual APIs.
+
+Back-end teams should be writing unit tests and integration tests while developing their features to ensure that everything is working correctly. Then once the UI is in place, those integration tests can be replaced by E2E tests.
+
+## Getting Real
+
+Let's be honest; what we have just described is an ideal scenario. We know that in the real world, things get messy, and teams seldomly follow "best practices," even though they know they should. You have deadlines and often unrealistic expectations placed upon you. We get it.
+
+Testing is hard, and no one does it perfectly, not even us. However, if you adopt some of these strategies, you will have fewer bugs in the features you ship and more confidence each time you push to production.
+
+So remember, a helpful strategy for writing tests is first to document what your application does and the most important features you want to test. Then test "user journeys," which will imitate what actual users of your application will do to ensure that everything is working correctly.

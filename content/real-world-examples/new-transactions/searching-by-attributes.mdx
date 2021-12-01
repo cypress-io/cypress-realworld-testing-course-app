@@ -1,0 +1,182 @@
+# Searching by attributes
+
+Before continuing, make sure you have read the [New Transaction Overview & Setup](/real-world-examples/new-transaction-overview-and-setup) lesson first.
+
+```js
+context("searches for a user by attribute", function () {
+    const searchAttrs: (keyof User)[] = [
+      "firstName",
+      "lastName",
+      "username",
+      "email",
+      "phoneNumber",
+    ];
+
+    beforeEach(function () {
+      cy.getBySelLike("new-transaction").click();
+      cy.wait("@allUsers");
+    });
+
+    searchAttrs.forEach((attr: keyof User) => {
+      it(attr, function () {
+        const targetUser = ctx.allUsers![2];
+
+        cy.log(`Searching by **${attr}**`);
+        cy.getBySel("user-list-search-input").type(targetUser[attr] as string, { force: true });
+        cy.wait("@usersSearch")
+          // make sure the backend returns some results
+          .its("response.body.results")
+          .should("have.length.gt", 0)
+          .its("length")
+          .then((resultsN) => {
+            cy.getBySelLike("user-list-item")
+              // make sure the list of results is fully updated
+              // and shows the number of results returned from the backend
+              .should("have.length", resultsN)
+              .first()
+              .contains(targetUser[attr] as string);
+          });
+
+        cy.visualSnapshot(`User List for Search: ${attr} = ${targetUser[attr]}`);
+
+        cy.focused().clear();
+        cy.getBySel("users-list").should("be.empty");
+        cy.visualSnapshot("User List Clear Search");
+      });
+    });
+  });
+
+```
+
+You can find out more information about the custom Cypress commands used in this test [here](/real-world-examples/custom-cypress-commands).
+
+First, we create a `searchAttrs` array that contains all of the user attributes we intend to search for.
+
+```js
+const searchAttrs: (keyof User)[] = [
+      "firstName",
+      "lastName",
+      "username",
+      "email",
+      "phoneNumber",
+    ];
+
+```
+
+Next we have a `beforeEach()` hook that clicks on the "New" transaction button and waits for our `@allUsers` intercept. Remember, this intercept occurs in the `beforeEach()` hook at the top of this spec file.
+
+```js
+beforeEach(function () {
+  cy.getBySelLike("new-transaction").click()
+  cy.wait("@allUsers")
+})
+```
+
+![](/images/real-world-examples/new-transactions/searching-by-attributes/Screen_Shot_2021-09-16_at_8.59.28_AM.png)
+
+Then, we are looping through the `searchAttrs` array to dynamically create our tests, one for each attribute in the array. Remember that Cypress is just JavaScript, which allows us to dynamically generate our tests instead of manually creating a test for each attribute.
+
+```js
+searchAttrs.forEach((attr: keyof User) => {
+      it(attr, function () {
+        const targetUser = ctx.allUsers![2];
+
+        cy.log(`Searching by **${attr}**`);
+        cy.getBySel("user-list-search-input").type(targetUser[attr] as string, { force: true });
+        cy.wait("@usersSearch")
+          // make sure the backend returns some results
+          .its("response.body.results")
+          .should("have.length.gt", 0)
+          .its("length")
+          .then((resultsN) => {
+            cy.getBySelLike("user-list-item")
+              // make sure the list of results is fully updated
+              // and shows the number of results returned from the backend
+              .should("have.length", resultsN)
+              .first()
+              .contains(targetUser[attr] as string);
+          });
+
+        cy.visualSnapshot(`User List for Search: ${attr} = ${targetUser[attr]}`);
+
+        cy.focused().clear();
+        cy.getBySel("users-list").should("be.empty");
+        cy.visualSnapshot("User List Clear Search");
+      });
+    });
+
+```
+
+Within our `.forEach()`, you can see that the first thing we do is create our `.it()` test and pass in the attribute as the test name.
+
+```js
+it(attr, function () {
+
+// ...
+
+```
+
+Next, we grab a user from our `ctx` object created in the `.beforeEach()` at the top of this spec file.
+
+```js
+const targetUser = ctx.allUsers![2];
+
+```
+
+We then use <apiLink apiName="log" displayName="cy.log()" /> to output a custom message to the Cypress Command Log in the test runner. This makes it easy for us to see what is happening in the test runner and is helpful for debugging.
+
+```js
+cy.log(`Searching by **${attr}**`)
+```
+
+![](/images/real-world-examples/new-transactions/searching-by-attributes/Screen_Shot_2021-09-16_at_9.01.48_AM.png)
+
+We then perform a search for the specific attribute.
+
+```js
+cy.getBySel("user-list-search-input").type(targetUser[attr] as string, { force: true });
+
+```
+
+![](/images/real-world-examples/new-transactions/searching-by-attributes/Screen_Shot_2021-09-16_at_9.02.29_AM.png)
+
+Next, we wait upon the `@usersSearch` intercept, which occurs in the `.beforeEach()` at the top of the spec file.
+
+```js
+cy.wait("@usersSearch")
+```
+
+We then grab the `results` from the `response.body` and write an assertion to make sure we have some results, i.e the `results` array should not be empty
+
+```js
+.its("response.body.results")
+.should("have.length.gt", 0)
+
+```
+
+![](/images/real-world-examples/new-transactions/searching-by-attributes/Screen_Shot_2021-09-16_at_9.03.24_AM.png)
+
+Then, we get the `.length` of the `results` array and write an assertion to make sure our UI displays the correct number of results returned from our back-end. We also have an assertion that the first item displayed in the search is the attribute we searched for.
+
+```js
+.its("length")
+          .then((resultsN) => {
+            cy.getBySelLike("user-list-item")
+              // make sure the list of results is fully updated
+              // and shows the number of results returned from the backend
+              .should("have.length", resultsN)
+              .first()
+              .contains(targetUser[attr] as string);
+
+```
+
+![](/images/real-world-examples/new-transactions/searching-by-attributes/Screen_Shot_2021-09-16_at_9.03.54_AM.png)
+
+Finally, we make sure that the users list is empty.
+
+```js
+cy.focused().clear()
+cy.getBySel("users-list").should("be.empty")
+```
+
+![](/images/real-world-examples/new-transactions/searching-by-attributes/Screen_Shot_2021-09-16_at_9.04.28_AM.png)

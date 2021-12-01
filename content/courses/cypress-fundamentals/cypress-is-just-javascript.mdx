@@ -1,0 +1,65 @@
+# Cypress is Just JavaScript
+
+## Generating Tests Dynamically with Lodash
+
+It is important to recognize that Cypress is just JavaScript. For example, here is a test where we are using `_.each` from [Lodash](https://lodash.com/) to dynamically create tests.
+
+By the way, did you know that Cypress natively imports [Lodash](https://lodash.com/)? You can use [Lodash](https://lodash.com/) in your tests by importing it, as you see in the example below.
+
+```js
+const { _ } = Cypress // importing lodash
+
+_.each(feedViews, (feed, feedName) => {
+      it(`paginates ${feedName} transaction feed`, function () {
+        cy.getBySelLike(feed.tab)
+          .click()
+          .should("have.class", "Mui-selected")
+          .contains(feed.tabLabel, { matchCase: false })
+          .should("have.css", { "text-transform": "uppercase" });
+        cy.getBySel("list-skeleton").should("not.exist");
+        cy.visualSnapshot(`Paginate ${feedName}`);
+
+        cy.wait(`@${feed.routeAlias}`)
+          .its("response.body.results")
+          .should("have.length", Cypress.env("paginationPageSize"));
+// ...
+```
+
+This example comes from the [Real World App](https://github.com/cypress-io/cypress-realworld-app).
+
+## Using Array.forEach()
+
+Here is another example where we use [Array.forEach()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach) to iterate over an array.
+
+```js
+const people = ["moe", "curly", "larry"]
+// Use method from lodash to get a person to use in a comment
+const transactions = [{ id: 1 }]
+_.each(transaction,
+it("comments on a transaction", function () {
+    cy.getBySelLike("transaction-item").first().click();
+    cy.wait("@getTransaction");
+
+    const comments = ["Thank you!", "Appreciate it."];
+
+    comments.forEach((comment, index) => {
+      cy.getBySelLike("comment-input").type(`${comment}{enter}`);
+      cy.getBySelLike("comments-list").children().eq(index).contains(comment);
+    });
+
+    cy.getBySelLike("comments-list").children().should("have.length", comments.length);
+    cy.visualSnapshot("Comment on Transaction");
+  });
+```
+
+## Practice
+
+If you would like to practice how to to use JavaScript in Cypress, we have created a special repo which can be found [here](https://github.com/cypress-io/cypress-realworld-testing-blog). The installation instructions are located in the **README.md** file.
+
+The practice file you are looking for can be found in **cypress/integration/Practice/just-javascript.spec.js**.
+
+Should you get stuck or need some help, all of the answers are provided within **cypress/integration/Answers/just-javascript.spec.js**
+
+## Wrap Up
+
+Congrats! You have finished the third course of Real World Testing with Cypress. In the next course you will learn some of the more advanced concepts in Cypress that take your tests to the next level.

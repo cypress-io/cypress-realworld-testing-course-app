@@ -1,0 +1,32 @@
+# Integration & API Tests
+
+Cypress provides a great developer experience for testing APIs. We used Cypress extensively to test the various APIs within the [Real World App (RWA)](https://github.com/cypress-io/cypress-realworld-app). Before we built the UI, we wrote various [API and integration tests](https://github.com/cypress-io/cypress-realworld-app/tree/develop/cypress/tests/api) with Cypress to ensure the application APIs were working as expected.
+
+## Example API Test
+
+Let's look at one of the API tests from the RWA to understand better how to test APIs using Cypress.
+
+```js
+// cypress/tests/api/api-users.spec.ts
+
+context("GET /users", function () {
+  it("gets a list of users", function () {
+    cy.request("GET", "/users").then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body.results).length.to.be.greaterThan(1)
+    })
+  })
+})
+```
+
+In this simple test, we make a **GET** request to our **/users** route using <apiLink apiName="request" displayName="cy.request()" />. We assert that the response returns a **200** status code and that more than one user is returned from the response.
+
+## Developer Experience
+
+One of the pleasant aspects of using Cypress for testing APIs is that you can easily see and interact with the response data from within the Test Runner UI.
+
+Clicking upon the request step in the Cypress Command Log, we can see all of the response data in the browser's console.
+
+![](/images/advanced-cypress-concepts/integration-and-api-tests/Screen_Shot_2021-09-01_at_9.20.04_AM.png)
+
+This allows you to quickly inspect and debug the data coming back from your APIs against the actual data returned in the original requests.

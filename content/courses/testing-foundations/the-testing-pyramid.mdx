@@ -1,0 +1,41 @@
+# The Testing Pyramid
+
+![](/images/testing-foundations/automated-tools-pyramid.png)
+
+Source: [https://reflect.run/articles/automated-testing-tools/](https://reflect.run/articles/automated-testing-tools/)
+
+The testing pyramid illustrates the various types of tests and their relationship to one another. Developers can be pretty dogmatic and very strongly opinionated when it comes to testing, but remember, while definitions and labels can be helpful, ultimately, "[it's not important what you call it, but what it does](https://web.archive.org/web/20150104002755/http://gojko.net/2011/01/12/the-false-dichotomy-of-tests)" - Gojko Adzic.
+
+## Unit tests
+
+At the base of the pyramid are unit tests. They are at the bottom because they are the foundation upon which your other tests rest.
+
+As you can see, they take up the largest amount of space of the pyramid and are typically the tests that you will write the most.
+
+Unit tests are intended to test a single "unit" within an application. This means that they should not be dependent upon other parts of the system or application. Think of testing a single function, for example.
+
+When writing unit tests, you want to think of the function you are testing as a black box. You are not concerned with the logic inside of the function. You are only concerned that you expect a specific type of output given a specific type of input. This way, you can always refactor the internals or body of the function without breaking your tests.
+
+So again, you are simply testing that given a set of inputs into this function, we expect this specific output. How that works internally is irrelevant for your testing purposes.
+
+## Integration tests
+
+The point of integration testing is to ensure that individual pieces or units within an application work together as expected.
+
+Unlike unit tests, which should always be independent, integration tests are fundamentally dependent. Their entire purpose is to test the dependencies of pieces within a system are working together correctly.
+
+So the distinction between a unit test and an integration test is that unit tests test things in isolation, and integration tests, are testing portions of your application that are related to one another, never in isolation.
+
+Integration tests are great for when you are building a new application from scratch or an application or feature that does not have a UI yet. However, once you have a UI, that is when you should be writing end to end (E2E) tests.
+
+## End to End tests
+
+These types of tests are written to test anything that runs in the browser. The purpose of these tests is to imitate what a real user would do.
+
+For example, you might write a single test that registers a new account, logs in to that newly created account, purchases a product and then logs out. This way, you can ensure that all the layers within your application are working together correctly.
+
+End-to-end (E2E) tests will often replace your integration tests, as they are essentially testing the same thing. However, E2E tests have an ever more significant advantage and value over integration tests, as they are testing real user interactions within your application.
+
+## Wrap Up
+
+Congrats! You have finished the second course of Real World Testing with Cypress. In the next course you will learn the fundamentals of Cypress.

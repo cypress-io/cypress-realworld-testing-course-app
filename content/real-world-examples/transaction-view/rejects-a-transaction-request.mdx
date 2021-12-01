@@ -1,0 +1,47 @@
+# rejects a transaction request
+
+Before continuing, make sure you have read the [Transaction View Overview & Setup](/real-world-examples/transaction-view-overview-and-setup) lesson first.
+
+```js
+it("rejects a transaction request", function () {
+    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+    cy.wait("@getTransaction");
+
+    cy.getBySelLike("reject-request").click();
+    cy.wait("@updateTransaction").its("response.statusCode").should("equal", 204);
+    cy.getBySelLike("reject-request").should("not.exist");
+    cy.getBySel("transaction-detail-header").should("be.visible");
+    cy.visualSnapshot("Transaction Rejected");
+  });
+
+```
+
+You can find out more information about the custom Cypress commands used in this test [here](/real-world-examples/custom-cypress-commands).
+
+First, we visit the transaction screen for the specific transaction we looked up within the `beforeEach()` hook at the top of the spec file. Then we wait upon the `@getTransaction` intercept.
+
+```js
+cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+    cy.wait("@getTransaction");
+
+```
+
+Next, we click on the "Reject Request" button and wait on the `@updateTransaction` intercept and confirm that this intercepts status code is **204**.
+
+```js
+cy.getBySelLike("reject-request").click()
+cy.wait("@updateTransaction").its("response.statusCode").should("equal", 204)
+```
+
+![](/images/real-world-examples/transaction-view/rejects-a-transaction-request/Screen_Shot_2021-09-16_at_9.24.53_AM.png)
+
+![](/images/real-world-examples/transaction-view/rejects-a-transaction-request/Screen_Shot_2021-09-16_at_9.25.17_AM.png)
+
+Finally, we make sure the reject request button is no longer in the DOM and that the transaction detail header is visible.
+
+```js
+cy.getBySelLike("reject-request").should("not.exist")
+cy.getBySel("transaction-detail-header").should("be.visible")
+```
+
+![](/images/real-world-examples/transaction-view/rejects-a-transaction-request/Screen_Shot_2021-09-16_at_9.25.33_AM.png)

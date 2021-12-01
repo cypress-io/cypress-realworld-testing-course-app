@@ -1,0 +1,128 @@
+# How to Test Various Browsers & Viewports
+
+## Different Browsers
+
+Running all of your tests within [multiple browsers](https://docs.cypress.io/guides/guides/cross-browser-testing) and across various screen sizes is incredibly important. Currently, Cypress supports [Chrome-family browsers](https://docs.cypress.io/guides/guides/launching-browsers#Chrome-Browsers) (including Electron and Chromium-based Microsoft Edge) and Firefox.
+
+You can also configure Cypress to run your tests within a specific window size with custom configurations. A great example of how to do this is in the [Real World App (RWA)](https://github.com/cypress-io/cypress-realworld-app). If you look at the [GitHub Actions workflow](https://github.com/cypress-io/cypress-realworld-app/blob/develop/.github/workflows/main.yml), we will run the tests within the RWA in Chrome Desktop, Chrome Mobile, Firefox Desktop, and Firefox Mobile.
+
+We can tell Cypress to use a specific browser by specifying the browser we want with the browser key like so:
+
+```yaml
+browser: Firefox
+```
+
+This works excellent in CI, but what if you want to do this locally?
+
+You can pass in which browser you would like Cypress to run in via the command line like so:
+
+```bash
+cypress run --browser Firefox
+```
+
+You can also select which browser to run via the UI by selecting it in the dropdown like so:
+
+![](/images/advanced-cypress-concepts/how-to-test-various-browsers-and-viewports/Screen_Shot_2021-08-31_at_9.16.07_AM.png)
+
+You can even do this on a test by test basis by passing an [options object to your tests](https://docs.cypress.io/guides/guides/cross-browser-testing#Running-Specific-Tests-by-Browser).
+
+```js
+// Run the test if Cypress is running
+// using the built-in Electron browser
+it('has access to clipboard', { browser: 'electron' }, () => {
+  ...
+})
+
+// Run the test if Cypress is run via Firefox
+it('Download extension in Firefox', { browser: 'firefox' }, () => {
+  // ...
+})
+
+// Run the test if Cypress is run via Chrome
+it('Show warning outside Chrome', { browser: 'chrome' }, () => {
+  // ...
+})
+```
+
+You can even do this for all tests located within a `describe()` block like so:
+
+```js
+describe("happy path suite", { browser: "firefox" }, () => {
+  it("...")
+  it("...")
+  it("...")
+})
+```
+
+In this example, Firefox will run all tests located within this `describe()`.
+
+## Testing Mobile
+
+All of the tests within the RWA are written for Desktop by default. Within the `package.json`, we have custom scripts to launch Cypress with mobile dimensions.
+
+```json
+"cypress:open:mobile": "cypress open --config viewportWidth=375,viewportHeight=667",
+"cypress:run:mobile": "cypress run --config viewportWidth=375,viewportHeight=667",
+```
+
+As you can see, when these commands are executed, we are passing along some custom configuration that tells Cypress the **viewportWidth** and **viewportHeight** to use when launching our tests.
+
+We also have a utility function called `isMobile()` which determines if our tests are being run at the mobile viewport. Here is what that function looks like:
+
+```js
+export const isMobile = () => {
+  return (
+    Cypress.config("viewportWidth") <
+    Cypress.env("mobileViewportWidthBreakpoint")
+  )
+}
+```
+
+The environment variable `mobileViewportWidthBreakpoint` is located within the `cypress.json` config file.
+
+```json
+{
+  // ...
+
+  "env": {
+    "apiUrl": "http://localhost:3001",
+    "mobileViewportWidthBreakpoint": 414,
+    "coverage": false,
+    "codeCoverage": {
+      "url": "http://localhost:3001/__coverage__"
+    }
+  },
+  "experimentalStudio": true
+}
+```
+
+In our tests, we can use this function to determine if the tests are being executed within our mobile viewport and react accordingly using a conditional.
+
+```js
+it("should remember a user for 30 days after login", function () {
+  cy.database("find", "users").then((user: User) => {
+    cy.login(user.username, "s3cret", { rememberUser: true })
+  })
+
+  // Verify Session Cookie
+  cy.getCookie("connect.sid").should("have.property", "expiry")
+
+  // Logout User
+  if (isMobile()) {
+    cy.getBySel("sidenav-toggle").click()
+  }
+  cy.getBySel("sidenav-signout").click()
+  cy.location("pathname").should("eq", "/signin")
+  cy.visualSnapshot("Redirect to SignIn")
+})
+```
+
+In the case of the RWA, the sidebar is hidden by default on mobile. This function will fire whenever our viewport width is less than **414px**.
+
+This allows the same test to be used in both Desktop and Mobile orientations instead of coding mobile-specific tests.
+
+For more info, check out these articles within our docs.
+
+[Test Configuration](https://docs.cypress.io/guides/references/configuration#Test-Configuration)
+
+[Cross Browser Testing](https://docs.cypress.io/guides/guides/cross-browser-testing)
