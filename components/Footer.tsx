@@ -1,17 +1,9 @@
 const navigation = {
   main: [
-    { name: "Docs", href: "https://docs.cypress.io/" },
+    { name: "Next.js", href: "https://nextjs.org/" },
     {
-      name: "Real World App",
-      href: "https://github.com/cypress-io/cypress-realworld-app",
-    },
-    {
-      name: "YouTube",
-      href: "https://www.youtube.com/channel/UC-EOsTo2l2x39e4JmSaWNRQ",
-    },
-    {
-      name: "Discord",
-      href: "https://discord.gg/cMjUZg7",
+      name: "Cypress",
+      href: "https://www.cypress.io/",
     },
     {
       name: "GitHub",
