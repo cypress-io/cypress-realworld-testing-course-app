@@ -1,178 +1,19 @@
 # Setting up Data Before Each Test
 
-Our first test makes sure that a single todo can be added to our application. However, a todo app that only takes a single todo is useless. So let's write a test to make sure our app can add multiple todos.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mattis lobortis maximus. Quisque egestas, sem fringilla egestas aliquet, turpis nisl placerat justo, vitae feugiat ligula urna in justo. Curabitur porta risus libero, tempus imperdiet arcu auctor sed. Praesent eget luctus tortor, vel hendrerit sapien. Phasellus quis ex ligula. Curabitur vehicula, lacus imperdiet ornare pulvinar, sem massa vulputate sem, eget mattis ex diam a lorem. Cras ac ex gravida magna vestibulum volutpat et et elit. Nullam vitae porttitor nulla, sed volutpat nisi.
 
-First, we need to create another `it()` function to test adding three todos.
+## Section 1
 
-```js
-describe("React TodoMVC", () => {
-  it("adds a single todo", () => {
-    cy.visit("http://localhost:8888")
-    cy.get(".new-todo").type("Buy Milk{enter}")
-    cy.get(".todo-list li").should("have.length", 1)
-  })
+Sed elementum ut nulla nec sagittis. Sed orci neque, cursus id lacinia id, suscipit eget ligula. Etiam mollis dolor et libero dapibus facilisis. Phasellus erat ex, efficitur egestas lorem vitae, rhoncus convallis quam. Aliquam non laoreet ipsum. Nullam luctus, felis ut imperdiet mattis, ligula ligula ultricies orci, at dignissim erat odio id ligula. Praesent placerat sapien eu urna hendrerit pulvinar. Integer eget diam enim. Cras id massa porta, feugiat mi ac, euismod dui. Ut sed justo augue. Quisque viverra enim id nisi placerat, nec tincidunt urna facilisis. Nam vitae vestibulum ex, quis malesuada orci. Nulla a mi nec sem consectetur luctus non placerat urna.
 
-  it("adds three todos", () => {})
-})
-```
+## Section 2
 
-Remember, the first thing we need to do is to tell Cypress to <apiLink apiName="visit" displayName="cy.visit()" /> to our app. Each `it()` function is a separate test, so for each new test we write, we have to specifically tell Cypress to <apiLink apiName="visit" displayName="cy.visit()" /> our application.
+Vestibulum congue consectetur quam in mattis. Maecenas condimentum gravida arcu eu blandit. Aenean lorem risus, imperdiet eu bibendum vitae, imperdiet in diam. Phasellus quis risus ac leo condimentum egestas quis in tortor. Pellentesque at aliquet urna. Proin quis est tincidunt, molestie sem sit amet, aliquam leo. Suspendisse egestas lacinia dignissim.
 
-You may start to see a potential annoyance here. Granted, since we only have two tests right now, this is not that big of a deal, but what if our test file had several tests. This would mean that within every single `it()`, we would have to specifically tell Cypress to navigate to our app for each test, which is very repetitive and annoying. There is a better way, fortunately.
+## Section 3
 
-## beforeEach()
+Aenean eu lobortis nisi. Donec rutrum fringilla orci, vitae fermentum nisi porta eu. Nam sit amet odio lacus. Nulla eu fermentum metus. Suspendisse eu aliquet lectus, at fringilla massa. Pellentesque hendrerit iaculis metus id aliquet. Curabitur urna libero, molestie in lorem porta, imperdiet ultricies ex. Cras elementum aliquam lorem, non semper enim fermentum sed. Nullam egestas, elit at vulputate pretium, dui enim ornare erat, a tristique nulla risus id neque.
 
-The `beforeEach()` function, which is provided by [Mocha](https://mochajs.org/), is perfect for code that you want to execute before every test. Let's update our test file to use it, like so:
+## Section 4
 
-```js
-describe("React TodoMVC", () => {
-  beforeEach(() => {
-    cy.visit("http://localhost:8888")
-  })
-
-  it("adds a single todo", () => {
-    cy.get(".new-todo").type("Buy Milk{enter}")
-    cy.get(".todo-list li").should("have.length", 1)
-  })
-
-  it("adds three todos", () => {})
-})
-```
-
-Both tests are still passing with this simple update, and we have cleaned up our duplicate code.
-
-## Multiple Todos
-
-Now let's update our **adds three todos** test to add three todos.
-
-```js
-it("adds three todos", () => {
-  cy.get(".new-todo").type("Buy Milk{enter}")
-  cy.get(".new-todo").type("Pay Rent{enter}")
-  cy.get(".new-todo").type("Pickup Dry Cleaning{enter}")
-})
-```
-
-![](/images/testing-your-first-application/setting-up-data-before-each-test/Screen_Shot_2021-06-25_at_11.19.56_AM.png)
-
-Great our application can easily handle adding three todos.
-
-However, you may have noticed we are repeating ourselves once again.
-
-```js
-it("adds a single todo", () => {
-  cy.get(".new-todo").type("Buy Milk{enter}")
-  cy.get(".todo-list li").should("have.length", 1)
-})
-
-it("adds three todos", () => {
-  cy.get(".new-todo").type("Buy Milk{enter}")
-  cy.get(".new-todo").type("Pay Rent{enter}")
-  cy.get(".new-todo").type("Pickup Dry Cleaning{enter}")
-})
-```
-
-Instead of having to manually type out and hard code each and every todo, we can simply put them into a variable. Remember, Cypress is just JavaScript, so let's refactor the names of our todos into constants so we can easily re-use them.
-
-We will create variables at the top of our test, just underneath the `describe()` block.
-
-```js
-describe('React TodoMVC', () => {
-  const TODO_ITEM_ONE = 'Buy Milk'
-  const TODO_ITEM_TWO = 'Pay Rent'
-  const TODO_ITEM_THREE = 'Pickup Dry Cleaning'
-
-  beforeEach(() => {
-    cy.visit('http://localhost:8888')
-  })
-
-// ...
-```
-
-Then we can update our todos to use these new variables.
-
-```js
-describe("React TodoMVC", () => {
-  const TODO_ITEM_ONE = "Buy Milk"
-  const TODO_ITEM_TWO = "Pay Rent"
-  const TODO_ITEM_THREE = "Pickup Dry Cleaning"
-
-  beforeEach(() => {
-    cy.visit("http://localhost:8888")
-  })
-
-  it("adds a single todo", () => {
-    cy.get(".new-todo").type(`${TODO_ITEM_ONE}{enter}`)
-    cy.get(".todo-list li").should("have.length", 1)
-  })
-
-  it("adds three todos", () => {
-    cy.get(".new-todo").type(`${TODO_ITEM_ONE}{enter}`)
-    cy.get(".new-todo").type(`${TODO_ITEM_TWO}{enter}`)
-    cy.get(".new-todo").type(`${TODO_ITEM_THREE}{enter}`)
-  })
-})
-```
-
-Much better. Now we can easily re-use these todos throughout our tests.
-
-Finally, let's add an assertion like we did in our first test to make sure only three todo's have been added. Like so:
-
-```js
-it("adds three todos", () => {
-  cy.get(".new-todo").type(`${TODO_ITEM_ONE}{enter}`)
-  cy.get(".new-todo").type(`${TODO_ITEM_TWO}{enter}`)
-  cy.get(".new-todo").type(`${TODO_ITEM_THREE}{enter}`)
-  cy.get(".todo-list li").should("have.length", 3)
-})
-```
-
-And all of our tests are passing. Awesome!
-
-## Making our tests more robust
-
-So we currently have two tests, one that adds a single todo and another that adds multiple todos. This is great and useful, but we can take these tests further to make them even more robust. For example, shouldn't we also test that the todos render the correct text within the app? That seems valuable to test, so let's update our tests to do just that.
-
-Let's first try this out by updating our first test, which adds a single todo. Once we get it working, we can add this assertion to the other test.
-
-If we inspect our app with our dev tools again, we want to ensure that the text that we enter into the input field is rendered exactly as one of our todos. We can see that within each `<li>` each todo name is wrapped in a `<label>` element.
-
-![](/images/testing-your-first-application/setting-up-data-before-each-test/Screen_Shot_2021-06-25_at_11.32.00_AM.png)
-
-Knowing this, we can assert that our todo's name is within this `<label>` element.
-
-First we need to get all of the `<li>` elements.
-
-```js
-cy.get(".todo-list li")
-```
-
-Then we want to make sure we grab the first element in this array. We can do that by using the <apiLink apiName="eq" displayName=".eq()" /> method.
-
-```js
-cy.get(".todo-list li").eq(0)
-```
-
-We then pass <apiLink apiName="eq" displayName=".eq()" /> the index of our element, which should be the first one, and it will return that element from the array.
-
-Then we will use the [find()](https://docs.cypress.io/api/commands/find) method to find our `<label>` element.
-
-```js
-cy.get(".todo-list li").eq(0).find("label")
-```
-
-The <apiLink apiName="find" displayName=".find()" /> method will look for child elements of a specific selector.
-
-So, we are getting the first `<li>` element from the **.todo-list** element and then within that `<li>` element we are looking for the `<label>` element.
-
-Finally, we want to make sure that the `<label>` contains the text of our todo item.
-
-```js
-cy.get(".todo-list li").eq(0).find("label").should("contain", TODO_ITEM_ONE)
-```
-
-Save the file and let the tests run again.
-
-![](/images/testing-your-first-application/setting-up-data-before-each-test/Screen_Shot_2021-06-25_at_11.40.52_AM.png)
-
-Great, everything is green and passing.
+Suspendisse vel massa elementum, porta odio pharetra, fringilla nunc. Proin vitae porttitor ex. Phasellus suscipit lorem augue, a pretium mauris porttitor ut. Interdum et malesuada fames ac ante ipsum primis in faucibus. Etiam interdum sollicitudin arcu et tristique. Ut consequat ullamcorper dolor, quis laoreet velit fermentum vitae. Aliquam erat volutpat.

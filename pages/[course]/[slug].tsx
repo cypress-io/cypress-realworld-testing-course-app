@@ -14,7 +14,6 @@ import Layout from "../../components/Layout"
 import LessonHero from "../../components/Lesson/LessonHero"
 import LessonLayout from "../../components/Lesson/LessonLayout"
 import MCChallenge from "../../components/Lesson/MultipleChoiceChallenge"
-import apiLink from "../../components/Markdown/apiLink"
 
 const NextLessonBtn = dynamic(
   () => import("../../components/Lesson/NextLessonBtn"),
@@ -60,7 +59,6 @@ const components = {
   // See the notes in README.md for more details.
   //TestComponent: dynamic(() => import('../../components/TestComponent')),
   Head,
-  apiLink,
 }
 
 type Props = {
@@ -98,8 +96,7 @@ export default function LessonPage({
   courses,
   course,
 }: Props) {
-  // TODO: Figure out a better way to do this. It is necessary for the UI to update when state changes.
-  const [progressState] = useActor(progressService)
+  useActor(progressService)
 
   return (
     <Layout
@@ -107,11 +104,6 @@ export default function LessonPage({
       courses={courses}
       progressService={progressService}
     >
-      <Head>
-        <title>{lessonData.title} | Real World Testing with Cypress</title>
-        <meta name="description" content={lessonData.description} />
-      </Head>
-
       {lessonData.videoURL && <LessonHero lessonData={lessonData} />}
 
       <LessonLayout

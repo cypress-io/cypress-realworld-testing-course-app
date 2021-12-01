@@ -12,7 +12,7 @@
     "lessons": [
       {
         "title": "App Install and Overview",
-        "slug": "todomvc-app-install-and-overview",
+        "slug": "app-install-and-overview",
         "description": "How to install the TodoMVC application and get it up and running."
       },
       {
