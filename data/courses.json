@@ -1,9 +1,9 @@
 {
   "testing-your-first-application": {
-    "title": "Testing Your First Application",
+    "title": "Testing Your First Next.js Application",
     "slug": "testing-your-first-application",
-    "description": "How to test a simple TodoMVC app with Cypress.",
-    "image": "/images/courses/todo-mvc.png",
+    "description": "How to test a Next.js e-commerce app with Cypress.",
+    "image": "/images/courses/store.png",
     "learnFeatures": [
       "How to write Cypress tests",
       "How to install and use Cypress",
@@ -11,7 +11,7 @@
     ],
     "lessons": [
       {
-        "title": "TodoMVC App Install and Overview",
+        "title": "App Install and Overview",
         "slug": "todomvc-app-install-and-overview",
         "description": "How to install the TodoMVC application and get it up and running."
       },
@@ -31,7 +31,7 @@
     "title": "Testing Foundations",
     "slug": "testing-foundations",
     "description": "The fundamentals you need to write great tests.",
-    "image": "/images/courses/cypress-features.jpg",
+    "image": "https://tailwindui.com/img/component-images/inbox-app-screenshot-2.jpg",
     "learnFeatures": [
       "Learn what to test and why",
       "Arrange, Act, Assert",
