@@ -24,21 +24,6 @@
         "title": "Setting up Data Before Each Test",
         "slug": "setting-up-data-before-each-test",
         "description": "How to utilize the beforeEach hook to setup data before each test."
-      },
-      {
-        "title": "How to use Cypress Commands",
-        "slug": "how-to-use-cypress-commands",
-        "description": "How to use custom Cypress commands to simplify your test code."
-      },
-      {
-        "title": "Cypress Command Logs, Snapshots and Aliases",
-        "slug": "cypress-command-logs-snapshots-and-aliases",
-        "description": "How Cypress Command Logs, Snapshots and Aliases work."
-      },
-      {
-        "title": "Testing what isn't there",
-        "slug": "testing-what-isnt-there",
-        "description": "Learn how to test the 'Unhappy Paths' by ensuring certain elements do not exist on the page."
       }
     ]
   },
@@ -89,32 +74,6 @@
             "question": "Modern software development teams are integrating testing earlier in the software development lifecycle?",
             "answers": ["True", "False"],
             "correctAnswerIndex": 0
-          }
-        ]
-      },
-      {
-        "title": "Who should be responsible for testing?",
-        "slug": "who-should-be-responsible-for-testing",
-        "description": "In order to ship reliable, high quality software, testing should be everyone's responsibility and should be at the thought process of the entire team at the start of a project.",
-        "challenges": [
-          {
-            "challengeType": "multiple-choice",
-            "question": "Testing is everyone's responsibility",
-            "answers": ["True", "False"],
-            "correctAnswerIndex": 0
-          }
-        ]
-      },
-      {
-        "title": "The Testing Pyramid",
-        "slug": "the-testing-pyramid",
-        "description": "The difference between unit, integration and end to end tests.",
-        "challenges": [
-          {
-            "challengeType": "multiple-choice",
-            "question": "When writing a unit test to test a function, you are primarily concerned with testing the inner logic of that function?",
-            "answers": ["True", "False"],
-            "correctAnswerIndex": 1
           }
         ]
       }
@@ -172,71 +131,6 @@
             "question": "What does Cypress yield to the next command in the chain?",
             "answers": ["Object", "Variable", "Context", "Subject"],
             "correctAnswerIndex": 3
-          }
-        ]
-      },
-      {
-        "title": "Understanding the Asynchronous Nature of Cypress",
-        "slug": "understanding-the-asynchronous-nature-of-cypress",
-        "description": "How Cypress handles things asynchronously is often misunderstood by developers and can lead to issues and confusion later on, especially when trying to debug your tests.",
-        "challenges": [
-          {
-            "challengeType": "multiple-choice",
-            "question": "Cypress commands return their subjects?",
-            "answers": ["True", "False"],
-            "correctAnswerIndex": 1
-          }
-        ]
-      },
-      {
-        "title": "Waiting and Retry-ability",
-        "slug": "waiting-and-retry-ability",
-        "description": "Cypress will automatically wait until an element becomes visible, becomes enabled, or when another element is no longer covering an element.",
-        "challenges": [
-          {
-            "challengeType": "multiple-choice",
-            "question": "Cypress will automatically wait until an element becomes visible, becomes enabled, or when another element is no longer covering an element.",
-            "answers": ["True", "False"],
-            "correctAnswerIndex": 0
-          }
-        ]
-      },
-      {
-        "title": "Cypress UI Overview",
-        "slug": "cypress-ui-overview",
-        "description": "An overview of the Cypress test runner UI.",
-        "challenges": [
-          {
-            "challengeType": "multiple-choice",
-            "question": "The selector playground allows you to copy the cypress command to cy.get() an element in your app",
-            "answers": ["True", "False"],
-            "correctAnswerIndex": 0
-          }
-        ]
-      },
-      {
-        "title": "How to Debug Failing Tests",
-        "slug": "how-to-debug-failing-tests",
-        "description": "Best practices and tips on how to debug failing tests.",
-        "challenges": [
-          {
-            "challengeType": "multiple-choice",
-            "question": "The Cypress Test Runner, ie the UI, will automatically take screenshots and videos of failing tests.",
-            "answers": ["True", "False"],
-            "correctAnswerIndex": 1
-          }
-        ]
-      },
-      {
-        "title": "Cypress is just JavaScript",
-        "slug": "cypress-is-just-javascript",
-        "description": "Cypress is just JavaScript which means you can leverage 3rd party libraries and other language features within your tests.",
-        "challenges": [
-          {
-            "challengeType": "multiple-choice",
-            "question": "Using lots of variables in your tests is a good idea since Cypress is just JavaScript.",
-            "answers": ["True", "False"],
-            "correctAnswerIndex": 1
           }
         ]
       }
