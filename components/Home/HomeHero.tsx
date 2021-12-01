@@ -34,8 +34,7 @@ export default function HomeHero() {
                       </span>
                     </h1>
                     <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                      Learn from top industry experts and level-up your testing
-                      knowledge.
+                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                     </p>
 
                     {/* Features */}

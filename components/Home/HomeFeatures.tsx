@@ -11,37 +11,32 @@ const features = [
   {
     name: "Prepare your Testing Mindset",
     icon: LightBulbIcon,
-    description:
-      "Build a healthy mental model before testing your applications.",
+    description: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
   {
     name: "Learn What to Test",
     icon: BeakerIcon,
-    description: "Prioritize what parts of your application to test.",
+    description: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
   {
     name: "Debug Failing Tests Efficiently",
     icon: TerminalIcon,
-    description:
-      "Learn various tips, methods and techniques to help you better debug your failing tests",
+    description: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
   {
     name: "Learn Database Initialization & Seeding",
     icon: DatabaseIcon,
-    description:
-      "Get practical guidance on how to create the data you need for your tests.",
+    description: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
   {
     name: "Understand Different Testing Types",
     icon: CodeIcon,
-    description:
-      "Learn the difference between unit, integration and end-to-end tests.",
+    description: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
   {
     name: "Apply your Knowledge",
     icon: AdjustmentsIcon,
-    description:
-      "Practice how to test different apps in the real world, from simple to complex.",
+    description: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
 ]
 
