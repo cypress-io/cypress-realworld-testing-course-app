@@ -13,17 +13,41 @@
       {
         "title": "App Install and Overview",
         "slug": "app-install-and-overview",
-        "description": "How to install the TodoMVC application and get it up and running."
+        "description": "How to install the TodoMVC application and get it up and running.",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
       },
       {
         "title": "Installing Cypress and writing our first test",
         "slug": "installing-cypress-and-writing-our-first-test",
-        "description": "How to install Cypress and write your first end to end test."
+        "description": "How to install Cypress and write your first end to end test.",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
       },
       {
         "title": "Setting up Data Before Each Test",
         "slug": "setting-up-data-before-each-test",
-        "description": "How to utilize the beforeEach hook to setup data before each test."
+        "description": "How to utilize the beforeEach hook to setup data before each test.",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
       }
     ]
   },
@@ -45,9 +69,9 @@
         "challenges": [
           {
             "challengeType": "multiple-choice",
-            "question": "Even if you have a QA team, their input is not necessary for automated tests?",
+            "question": "Vestibulum congue consectetur quam in mattis?",
             "answers": ["True", "False"],
-            "correctAnswerIndex": 1
+            "correctAnswerIndex": 0
           }
         ]
       },
@@ -58,8 +82,8 @@
         "challenges": [
           {
             "challengeType": "multiple-choice",
-            "question": "What is the best way to test the most critical pieces of your application?",
-            "answers": ["User Journeys", "New Features", "Bugs", "Components"],
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
             "correctAnswerIndex": 0
           }
         ]
@@ -71,7 +95,7 @@
         "challenges": [
           {
             "challengeType": "multiple-choice",
-            "question": "Modern software development teams are integrating testing earlier in the software development lifecycle?",
+            "question": "Vestibulum congue consectetur quam in mattis?",
             "answers": ["True", "False"],
             "correctAnswerIndex": 0
           }
@@ -97,14 +121,9 @@
         "challenges": [
           {
             "challengeType": "multiple-choice",
-            "question": "What is a good pattern for writing tests?",
-            "answers": [
-              "Assert, Act, Arrange",
-              "Arrange, Assert, Act",
-              "Arrange, Act, Assert",
-              "Act, Assert, Arrange"
-            ],
-            "correctAnswerIndex": 2
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
           }
         ]
       },
@@ -115,7 +134,7 @@
         "challenges": [
           {
             "challengeType": "multiple-choice",
-            "question": "If it runs in the browser, Cypress has access to it?",
+            "question": "Vestibulum congue consectetur quam in mattis?",
             "answers": ["True", "False"],
             "correctAnswerIndex": 0
           }
@@ -128,9 +147,9 @@
         "challenges": [
           {
             "challengeType": "multiple-choice",
-            "question": "What does Cypress yield to the next command in the chain?",
-            "answers": ["Object", "Variable", "Context", "Subject"],
-            "correctAnswerIndex": 3
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
           }
         ]
       }
