@@ -20,7 +20,7 @@ export default function LessonHero(props) {
               <div className="relative mx-auto w-full rounded-lg shadow-lg lg:max-w-md">
                 <button
                   type="button"
-                  className="relative block w-full bg-white rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="relative block w-full bg-white rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <span className="sr-only">Watch our video to learn more</span>
                   <img
@@ -33,7 +33,7 @@ export default function LessonHero(props) {
                     aria-hidden="true"
                   >
                     <svg
-                      className="h-20 w-20 text-indigo-500"
+                      className="h-20 w-20 text-blue-500"
                       fill="currentColor"
                       viewBox="0 0 84 84"
                     >

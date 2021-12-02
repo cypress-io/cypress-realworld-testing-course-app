@@ -23,7 +23,7 @@ export default function LessonSteps({ course, content, progressService }) {
               <div
                 className={`-ml-px absolute mt-0.5 top-4 left-2 w-0.5 h-full ${
                   isLessonCompleted(progressService, `${course}/${lesson.slug}`)
-                    ? "bg-indigo-600"
+                    ? "bg-blue-600"
                     : "bg-gray-300"
                 }`}
                 aria-hidden="true"
@@ -40,7 +40,7 @@ export default function LessonSteps({ course, content, progressService }) {
                 <span className="h-9 flex items-center">
                   <span
                     data-test={`lesson-complete-${index}`}
-                    className="relative z-10 w-4 h-4 flex items-center justify-center bg-indigo-600 rounded-full group-hover:bg-indigo-800"
+                    className="relative z-10 w-4 h-4 flex items-center justify-center bg-blue-600 rounded-full group-hover:bg-blue-800"
                   >
                     <CheckIcon
                       className="w-5 h-5 text-white"
