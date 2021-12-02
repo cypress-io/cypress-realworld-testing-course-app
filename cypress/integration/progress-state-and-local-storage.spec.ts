@@ -20,12 +20,12 @@ describe("Progress State & Local Storage", () => {
 
   it("the progress state on the lesson page is preserved upon refresh", () => {
     cy.visit(`/${sectionSlug}/${lessons[0].slug}`)
-    cy.get("#answer-2").click()
+    cy.get("#answer-0").click()
     cy.getBySel("next-lesson-button").should("be.visible")
-    cy.getBySel("lesson-complete-0").should("have.class", "bg-indigo-600")
+    cy.getBySel("lesson-complete-0").should("have.class", "bg-blue-600")
     cy.reload()
     cy.getBySel("next-lesson-button").should("be.visible")
-    cy.getBySel("lesson-complete-0").should("have.class", "bg-indigo-600")
+    cy.getBySel("lesson-complete-0").should("have.class", "bg-blue-600")
   })
 
   it("the lesson page displays the complete lesson button when a lesson is completed and navigates to the homepage after the final lesson is completed", () => {
@@ -39,7 +39,7 @@ describe("Progress State & Local Storage", () => {
       cy.getBySel(
         `"challenge-answer-${lesson["challenges"][0]["correctAnswerIndex"]}"`
       ).click()
-      cy.getBySel("lesson-complete-0").should("have.class", "bg-indigo-600")
+      cy.getBySel("lesson-complete-0").should("have.class", "bg-blue-600")
       cy.getBySel("next-lesson-button").click()
     })
 

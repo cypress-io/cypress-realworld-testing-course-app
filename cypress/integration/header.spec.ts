@@ -16,8 +16,6 @@ const verifyCourseLinks = (path) => {
 describe("Header & Navigatiion", function () {
   it("renders the correct courses in the Courses dropdown menu", function () {
     verifyCourseLinks("/")
-    verifyCourseLinks("/real-world-examples/authentication-overview-and-setup")
-    verifyCourseLinks("/cypress-fundamentals/cypress-is-just-javascript")
   })
 })
 

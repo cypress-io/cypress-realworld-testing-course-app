@@ -35,7 +35,7 @@ describe("Next Lesson Button on Course Pages", () => {
 
   it("says 'Next Lesson' and links to the 2nd lesson if the first lesson has been completed", () => {
     cy.visit(`/${sectionSlug}/how-to-write-a-test`)
-    cy.get("#answer-2").click()
+    cy.get("#answer-0").click()
 
     cy.visit(`/${sectionSlug}`)
 
@@ -63,7 +63,7 @@ describe("Next Lesson Button on Course Pages", () => {
       cy.getBySel(
         `"challenge-answer-${lesson["challenges"][0]["correctAnswerIndex"]}"`
       ).click()
-      cy.getBySel("lesson-complete-0").should("have.class", "bg-indigo-600")
+      cy.getBySel("lesson-complete-0").should("have.class", "bg-blue-600")
       cy.getBySel("next-lesson-button").click()
     })
 

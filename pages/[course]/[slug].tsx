@@ -11,7 +11,6 @@ import rehypeSlug from "rehype-slug"
 import rehypePrism from "@mapbox/rehype-prism"
 import { progressService } from "../../machines/progressService"
 import Layout from "../../components/Layout"
-import LessonHero from "../../components/Lesson/LessonHero"
 import LessonLayout from "../../components/Lesson/LessonLayout"
 import MCChallenge from "../../components/Lesson/MultipleChoiceChallenge"
 
@@ -104,7 +103,12 @@ export default function LessonPage({
       courses={courses}
       progressService={progressService}
     >
-      {lessonData.videoURL && <LessonHero lessonData={lessonData} />}
+      <Head>
+        <title>
+          {lessonData.title} | Testing Next.js Applications with Cypress
+        </title>
+        <meta name="description" content={lessonData.description} />
+      </Head>
 
       <LessonLayout
         toc={toc}

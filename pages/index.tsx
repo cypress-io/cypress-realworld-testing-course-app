@@ -15,6 +15,10 @@ export default function Home({ content, courses }) {
     >
       <Head>
         <title>Testing Next.js Applications with Cypress</title>
+        <meta
+          name="description"
+          content="Learn from top industry experts and level-up your testing knowledge - for free."
+        />
       </Head>
 
       <HomeHero />

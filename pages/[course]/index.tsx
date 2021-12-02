@@ -21,7 +21,7 @@ export default function SectionPage({
       progressService={progressService}
     >
       <Head>
-        <title>{title} | Real World Testing with Cypress</title>
+        <title>{title} | Testing Next.js Applications with Cypress</title>
         <meta name="description" content={description} />
       </Head>
 
