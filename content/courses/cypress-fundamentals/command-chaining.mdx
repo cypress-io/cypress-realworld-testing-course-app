@@ -1,19 +1,19 @@
 # Command Chaining
 
-It's important to understand the mechanism Cypress uses to chain commands together. It manages a Promise chain on your behalf, with each command yielding a 'subject' to the following command until the chain ends or there is an error. The developer should not need to use Promises directly, but understanding how they work is helpful.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mattis lobortis maximus. Quisque egestas, sem fringilla egestas aliquet, turpis nisl placerat justo, vitae feugiat ligula urna in justo. Curabitur porta risus libero, tempus imperdiet arcu auctor sed. Praesent eget luctus tortor, vel hendrerit sapien. Phasellus quis ex ligula. Curabitur vehicula, lacus imperdiet ornare pulvinar, sem massa vulputate sem, eget mattis ex diam a lorem. Cras ac ex gravida magna vestibulum volutpat et et elit. Nullam vitae porttitor nulla, sed volutpat nisi.
 
-For example, a chain of Cypress commands looks like this:
+## Section 1
 
-```js
-cy.get(".todo-list li").find("label").should("contain", "Buy Milk")
-```
+Sed elementum ut nulla nec sagittis. Sed orci neque, cursus id lacinia id, suscipit eget ligula. Etiam mollis dolor et libero dapibus facilisis. Phasellus erat ex, efficitur egestas lorem vitae, rhoncus convallis quam. Aliquam non laoreet ipsum. Nullam luctus, felis ut imperdiet mattis, ligula ligula ultricies orci, at dignissim erat odio id ligula. Praesent placerat sapien eu urna hendrerit pulvinar. Integer eget diam enim. Cras id massa porta, feugiat mi ac, euismod dui. Ut sed justo augue. Quisque viverra enim id nisi placerat, nec tincidunt urna facilisis. Nam vitae vestibulum ex, quis malesuada orci. Nulla a mi nec sem consectetur luctus non placerat urna.
 
-In this example, <apiLink apiName="get" displayName="cy.get()" /> will yield the `<li>` subject to <apiLink apiName="find" displayName=".find()" /> which will then search for the `<label>` element. Finally, we make an assertion that the `<label>` contains the text "Buy Milk."
+## Section 2
 
-However, it is important to note that not all Cypress commands yield a subject that can be chained. For instance, <apiLink apiName="clearcookies" displayName="cy.clearCookies()" /> yields `null`, which _cannot_ be chained.
+Vestibulum congue consectetur quam in mattis. Maecenas condimentum gravida arcu eu blandit. Aenean lorem risus, imperdiet eu bibendum vitae, imperdiet in diam. Phasellus quis risus ac leo condimentum egestas quis in tortor. Pellentesque at aliquet urna. Proin quis est tincidunt, molestie sem sit amet, aliquam leo. Suspendisse egestas lacinia dignissim.
 
-Cypress commands like <apiLink apiName="get" displayName="cy.get()" /> and <apiLink apiName="contains" displayName="cy.contains()" /> yield DOM elements that can be chained, like in the example above.
+## Section 3
 
-When you want to act upon a subject directly from a Cypress command, you need to yield the subject to <apiLink apiName="then" displayName=".then()" />. We cover <apiLink apiName="then" displayName=".then()" /> and <apiLink apiName="wrap" displayName="cy.wrap()" /> in the [Understanding the Asynchronous nature of Cypress](/cypress-fundamentals/understanding-the-asynchronous-nature-of-cypress) lesson.
+Aenean eu lobortis nisi. Donec rutrum fringilla orci, vitae fermentum nisi porta eu. Nam sit amet odio lacus. Nulla eu fermentum metus. Suspendisse eu aliquet lectus, at fringilla massa. Pellentesque hendrerit iaculis metus id aliquet. Curabitur urna libero, molestie in lorem porta, imperdiet ultricies ex. Cras elementum aliquam lorem, non semper enim fermentum sed. Nullam egestas, elit at vulputate pretium, dui enim ornare erat, a tristique nulla risus id neque.
 
-You can learn more about command chaining from our docs [here](https://docs.cypress.io/guides/core-concepts/introduction-to-cypress#Chains-of-Commands).
+## Section 4
+
+Suspendisse vel massa elementum, porta odio pharetra, fringilla nunc. Proin vitae porttitor ex. Phasellus suscipit lorem augue, a pretium mauris porttitor ut. Interdum et malesuada fames ac ante ipsum primis in faucibus. Etiam interdum sollicitudin arcu et tristique. Ut consequat ullamcorper dolor, quis laoreet velit fermentum vitae. Aliquam erat volutpat.

@@ -1,61 +1,19 @@
 # How to Write a Test
 
-When first learning how to write automated tests, it can be easy to get stuck not knowing how to write the test. Tests should be composed using a pattern that makes them easy to write, reason about, and expand. One pattern is the AAA (Arrange-Act-Assert) pattern, which encourages the organization of the test code in a way that allows the most readability and flexibility.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mattis lobortis maximus. Quisque egestas, sem fringilla egestas aliquet, turpis nisl placerat justo, vitae feugiat ligula urna in justo. Curabitur porta risus libero, tempus imperdiet arcu auctor sed. Praesent eget luctus tortor, vel hendrerit sapien. Phasellus quis ex ligula. Curabitur vehicula, lacus imperdiet ornare pulvinar, sem massa vulputate sem, eget mattis ex diam a lorem. Cras ac ex gravida magna vestibulum volutpat et et elit. Nullam vitae porttitor nulla, sed volutpat nisi.
 
-In step one, the **Arrange** step, you have to perform some setup for your test. For example, in the case of a Cypress end-to-end test, you need to tell Cypress to open the browser and navigate to the correct URL.
+## Section 1
 
-```js
-cy.visit("http://localhost:8888")
-```
+Sed elementum ut nulla nec sagittis. Sed orci neque, cursus id lacinia id, suscipit eget ligula. Etiam mollis dolor et libero dapibus facilisis. Phasellus erat ex, efficitur egestas lorem vitae, rhoncus convallis quam. Aliquam non laoreet ipsum. Nullam luctus, felis ut imperdiet mattis, ligula ligula ultricies orci, at dignissim erat odio id ligula. Praesent placerat sapien eu urna hendrerit pulvinar. Integer eget diam enim. Cras id massa porta, feugiat mi ac, euismod dui. Ut sed justo augue. Quisque viverra enim id nisi placerat, nec tincidunt urna facilisis. Nam vitae vestibulum ex, quis malesuada orci. Nulla a mi nec sem consectetur luctus non placerat urna.
 
-In step two, the **Act** step, you perform some action. For example, in the case of a todo app, you want to test that you can add a single todo.
+## Section 2
 
-```js
-cy.get(".new-todo").type("Buy Milk{enter}")
-```
+Vestibulum congue consectetur quam in mattis. Maecenas condimentum gravida arcu eu blandit. Aenean lorem risus, imperdiet eu bibendum vitae, imperdiet in diam. Phasellus quis risus ac leo condimentum egestas quis in tortor. Pellentesque at aliquet urna. Proin quis est tincidunt, molestie sem sit amet, aliquam leo. Suspendisse egestas lacinia dignissim.
 
-In this example, we are getting the element with the class of **.new-todo** and then typing "Buy Milk" and simulating pressing the **Enter** key to add the todo.
+## Section 3
 
-Finally, in step three, you **Assert**. In this step, you assert that the thing you acted upon in step two did what you expected.
+Aenean eu lobortis nisi. Donec rutrum fringilla orci, vitae fermentum nisi porta eu. Nam sit amet odio lacus. Nulla eu fermentum metus. Suspendisse eu aliquet lectus, at fringilla massa. Pellentesque hendrerit iaculis metus id aliquet. Curabitur urna libero, molestie in lorem porta, imperdiet ultricies ex. Cras elementum aliquam lorem, non semper enim fermentum sed. Nullam egestas, elit at vulputate pretium, dui enim ornare erat, a tristique nulla risus id neque.
 
-```js
-cy.get(".todo-list li").should("have.length", 1)
-```
+## Section 4
 
-In this example, we are getting the element that contains the todo items that we added to the app and asserting that there is only a single todo.
-
-With these three steps in mind, here is what a simple Cypress end-to-end test looks like for a TodoMVC application.
-
-## A simple end-to-end test
-
-The following example is from the React TodoMVC app, which we cover in the "Testing your first application" section.
-
-```js
-// app.spec.js
-
-describe("React TodoMVC", () => {
-  it("adds a single todo", () => {
-    cy.visit("http://localhost:8888") // Arrange
-    cy.get(".new-todo").type("Buy Milk{enter}") // Act
-    cy.get(".todo-list li").should("have.length", 1) // Assert
-  })
-})
-```
-
-Before breaking this test file down, it is important to note that Cypress is built upon [Mocha](https://mochajs.org/). In this example, all of the functions other than those that begin with `cy` come from Mocha.
-
-Each test file will typically begin with a `describe()` function or "block." This function provides a way to organize your tests and makes things easier to read. Test files can have multiple `describe()` within them as it provides the context for the tests written inside them.
-
-Next, we have an `it` block. This is our actual test and where our test code goes. We first provide a test name "adds a single todo" and then pass in a callback function. Within the body of our test, we are doing three things.
-
-### 1. Arrange
-
-Telling Cypress to visit the URL **http://localhost:8888**
-
-### 2. Act
-
-Getting the element with the class of **.new-todo** and typing in the string "Buy Milk" and pressing the **Enter** key.
-
-### 3. Assert
-
-We are asserting that only a single todo has been added to the app.
+Suspendisse vel massa elementum, porta odio pharetra, fringilla nunc. Proin vitae porttitor ex. Phasellus suscipit lorem augue, a pretium mauris porttitor ut. Interdum et malesuada fames ac ante ipsum primis in faucibus. Etiam interdum sollicitudin arcu et tristique. Ut consequat ullamcorper dolor, quis laoreet velit fermentum vitae. Aliquam erat volutpat.
