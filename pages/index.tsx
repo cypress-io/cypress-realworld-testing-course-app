@@ -4,7 +4,6 @@ import HomeHero from "../components/Home/HomeHero"
 import HomeFeatures from "../components/Home/HomeFeatures"
 import HomeCourses from "../components/Home/HomeCourses"
 import coursesJson from "../data/courses.json"
-import realWorldExamples from "../data/real-world-examples.json"
 import { progressService } from "../machines/progressService"
 
 export default function Home({ content, courses }) {
@@ -35,7 +34,6 @@ export const getStaticProps = async ({ params }) => {
     props: {
       content: coursesJson,
       courses,
-      realWorldExamples,
     },
   }
 }
