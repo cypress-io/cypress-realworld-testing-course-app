@@ -1,3 +1,5 @@
+import React from "react"
+import { useForm, SubmitHandler } from "react-hook-form"
 import { CheckIcon } from "@heroicons/react/outline"
 
 const features = [
@@ -15,7 +17,40 @@ const features = [
   },
 ]
 
+type Inputs = {
+  email: string
+}
+
 export default function HomeHero() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState,
+    formState: { errors },
+  } = useForm<Inputs>()
+
+  const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] =
+    React.useState(false)
+
+  const onSubmit: SubmitHandler<Inputs> = async (data, event) => {
+    event.target.reset()
+
+    const subscribe = await fetch("/api/subscribe", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+    const response = await subscribe.json()
+
+    console.log(response)
+    setIsSuccessfullySubmitted(response.message)
+  }
+
+  // console.log(watch("email"))
   return (
     <div className="">
       <div className="relative overflow-hidden">
@@ -61,37 +96,43 @@ export default function HomeHero() {
 
                     <div className="mt-10 sm:mt-12">
                       <form
-                        action="#"
-                        className="sm:max-w-xl sm:mx-auto lg:mx-0"
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="sm:flex"
                       >
-                        <form
-                          action="/api/subscribe"
-                          method="POST"
-                          className="sm:flex"
-                        >
-                          <div className="min-w-0 flex-1">
-                            <label htmlFor="email" className="sr-only">
-                              Subscribe for Updates
-                            </label>
-                            <input
-                              data-test="email-input"
-                              id="email"
-                              type="email"
-                              name="email"
-                              placeholder="Subscribe for Updates"
-                              className="block w-full px-4 py-3 rounded-md border-2text-base text-gray-900 placeholder-gray-500"
-                              required
-                            />
-                          </div>
-                          <div className="mt-3 sm:mt-0 sm:ml-3">
-                            <input
-                              data-test="submit-button"
-                              type="submit"
-                              value="Subscribe"
-                              className="block w-full py-3 px-4 rounded-md shadow bg-blue-500 text-white font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 focus:ring-offset-gray-900"
-                            />
-                          </div>
-                        </form>
+                        <div className="min-w-0 flex-1">
+                          <label htmlFor="email" className="sr-only">
+                            Subscribe for Updates
+                          </label>
+                          <input
+                            data-test="email-input"
+                            {...register("email", {
+                              required: "Email is required",
+                            })}
+                            id="email"
+                            type="email"
+                            name="email"
+                            placeholder="Subscribe for Updates"
+                            className="block w-full px-4 py-3 rounded-md border-2text-base text-gray-900 placeholder-gray-500"
+                          />
+                          {errors.email && (
+                            <span className="text-red-500">
+                              {errors.email.message}
+                            </span>
+                          )}
+                          {formState.isSubmitted && (
+                            <div className="text-jade-500">
+                              {isSuccessfullySubmitted}
+                            </div>
+                          )}
+                        </div>
+                        <div className="mt-3 sm:mt-0 sm:ml-3">
+                          <input
+                            data-test="submit-button"
+                            type="submit"
+                            value="Subscribe"
+                            className="block w-full py-3 px-4 rounded-md shadow bg-blue-500 text-white font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 focus:ring-offset-gray-900"
+                          />
+                        </div>
                       </form>
                     </div>
                   </div>
