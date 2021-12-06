@@ -25,7 +25,6 @@ export default function HomeHero() {
   const {
     register,
     handleSubmit,
-    watch,
     formState,
     formState: { errors },
   } = useForm<Inputs>()
@@ -49,7 +48,6 @@ export default function HomeHero() {
     setIsSuccessfullySubmitted(response.message)
   }
 
-  // console.log(watch("email"))
   return (
     <div className="">
       <div className="relative overflow-hidden">
