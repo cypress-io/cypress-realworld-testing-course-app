@@ -64,7 +64,11 @@ export default function HomeHero() {
                         action="#"
                         className="sm:max-w-xl sm:mx-auto lg:mx-0"
                       >
-                        <div className="sm:flex">
+                        <form
+                          action="/api/subscribe"
+                          method="POST"
+                          className="sm:flex"
+                        >
                           <div className="min-w-0 flex-1">
                             <label htmlFor="email" className="sr-only">
                               Subscribe for Updates
@@ -72,19 +76,20 @@ export default function HomeHero() {
                             <input
                               id="email"
                               type="email"
+                              name="email"
                               placeholder="Subscribe for Updates"
                               className="block w-full px-4 py-3 rounded-md border-2text-base text-gray-900 placeholder-gray-500"
+                              required
                             />
                           </div>
                           <div className="mt-3 sm:mt-0 sm:ml-3">
-                            <button
+                            <input
                               type="submit"
+                              value="Subscribe"
                               className="block w-full py-3 px-4 rounded-md shadow bg-blue-500 text-white font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 focus:ring-offset-gray-900"
-                            >
-                              Subscribe
-                            </button>
+                            />
                           </div>
-                        </div>
+                        </form>
                       </form>
                     </div>
                   </div>
