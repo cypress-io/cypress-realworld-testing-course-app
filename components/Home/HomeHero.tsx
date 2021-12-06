@@ -112,12 +112,18 @@ export default function HomeHero() {
                             className="block w-full px-4 py-3 rounded-md border-2text-base text-gray-900 placeholder-gray-500"
                           />
                           {errors.email && (
-                            <span className="text-red-500">
+                            <span
+                              className="text-red-500"
+                              data-test="email-error-message"
+                            >
                               {errors.email.message}
                             </span>
                           )}
                           {formState.isSubmitted && (
-                            <div className="text-jade-500">
+                            <div
+                              className="text-jade-500"
+                              data-test="email-success-message"
+                            >
                               {isSuccessfullySubmitted}
                             </div>
                           )}

@@ -1,5 +1,4 @@
 export default function handler(req, res) {
-  // console.log(req.body)
   if (req.method === "POST" && req.body.email) {
     res.status(200).json({
       message: `Success: ${req.body.email} has been successfully subscribed`,
