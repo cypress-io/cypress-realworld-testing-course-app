@@ -74,6 +74,7 @@ export default function HomeHero() {
                               Subscribe for Updates
                             </label>
                             <input
+                              data-test="email-input"
                               id="email"
                               type="email"
                               name="email"
@@ -84,6 +85,7 @@ export default function HomeHero() {
                           </div>
                           <div className="mt-3 sm:mt-0 sm:ml-3">
                             <input
+                              data-test="submit-button"
                               type="submit"
                               value="Subscribe"
                               className="block w-full py-3 px-4 rounded-md shadow bg-blue-500 text-white font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 focus:ring-offset-gray-900"
