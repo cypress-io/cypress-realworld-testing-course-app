@@ -46,7 +46,6 @@ export default function HomeHero() {
     })
     const response = await subscribe.json()
 
-    console.log(response)
     setIsSuccessfullySubmitted(response.message)
   }
 
