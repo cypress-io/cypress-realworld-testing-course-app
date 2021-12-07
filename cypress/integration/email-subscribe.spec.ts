@@ -19,7 +19,7 @@ describe("Email Subscribe", () => {
       cy.getBySel("error-message").should("not.exist")
     })
 
-    it("does NOT allow a bad email address", function () {
+    it("does NOT allow a invalid email address", function () {
       cy.visit("/")
       cy.getBySel("email-input").type("tom")
       cy.getBySel("submit-button").click()
