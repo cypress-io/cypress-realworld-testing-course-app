@@ -29,8 +29,7 @@ export default function HomeHero() {
     formState: { errors },
   } = useForm<Inputs>()
 
-  const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] =
-    React.useState(false)
+  const [isSubmitted, setIsSubmitted] = React.useState("")
 
   const onSubmit: SubmitHandler<Inputs> = async (data, event) => {
     event.target.reset()
@@ -38,14 +37,13 @@ export default function HomeHero() {
     const subscribe = await fetch("/api/subscribe", {
       method: "POST",
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
     const response = await subscribe.json()
 
-    setIsSuccessfullySubmitted(response.message)
+    setIsSubmitted(response.message)
   }
 
   return (
@@ -119,14 +117,24 @@ export default function HomeHero() {
                               {errors.email.message}
                             </span>
                           )}
-                          {formState.isSubmitted && (
-                            <div
-                              className="text-jade-500"
-                              data-test="email-success-message"
-                            >
-                              {isSuccessfullySubmitted}
-                            </div>
-                          )}
+                          {formState.isSubmitted &&
+                            isSubmitted.includes("Success:") && (
+                              <div
+                                className="text-jade-500"
+                                data-test="email-success-message"
+                              >
+                                {isSubmitted}
+                              </div>
+                            )}
+                          {formState.isSubmitted &&
+                            isSubmitted.includes("Error:") && (
+                              <div
+                                className="text-red-500"
+                                data-test="email-success-message"
+                              >
+                                {isSubmitted}
+                              </div>
+                            )}
                         </div>
                         <div className="mt-3 sm:mt-0 sm:ml-3">
                           <input
