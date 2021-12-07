@@ -130,7 +130,7 @@ export default function HomeHero() {
                             isSubmitted.includes("Error:") && (
                               <div
                                 className="text-red-500"
-                                data-test="email-success-message"
+                                data-test="email-error-message-subscribed"
                               >
                                 {isSubmitted}
                               </div>

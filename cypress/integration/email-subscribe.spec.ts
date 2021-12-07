@@ -6,8 +6,9 @@ describe("Email Subscribe", () => {
   })
 
   const EMAIL = "tom@aol.com"
+  const SUBSCRIBED_EMAIL = "john@example.com"
 
-  describe("UI Tests", () => {
+  context("UI Tests", () => {
     it("allows users to subscribe to the email list", function () {
       cy.visit("/")
       cy.getBySel("email-input").type(EMAIL)
@@ -28,12 +29,20 @@ describe("Email Subscribe", () => {
       cy.visit("/")
       cy.getBySel("email-input")
       cy.getBySel("submit-button").click()
-      cy.getBySel("email-success-message").should("not.be.visible")
+      cy.getBySel("email-success-message").should("not.exist")
       cy.getBySel("email-error-message").should("exist")
+    })
+
+    it("does NOT allow already subscribed email addresses", function () {
+      cy.visit("/")
+      cy.getBySel("email-input").type(SUBSCRIBED_EMAIL)
+      cy.getBySel("submit-button").click()
+      cy.getBySel("email-success-message").should("not.exist")
+      cy.getBySel("email-error-message-subscribed").should("exist")
     })
   })
 
-  describe("Network Tests", () => {
+  context("Network Tests", () => {
     it("the /api/subscribe endpoint only accepts POST requests", function () {
       const requests = ["GET", "PUT", "DELETE", "PATCH"]
 
@@ -75,6 +84,20 @@ describe("Email Subscribe", () => {
       cy.get("@postEmailSubscribe").should((response) => {
         // @ts-ignore
         expect(response.status).to.eq(200)
+      })
+    })
+
+    it("the API returns a status code of 403 if the email has already been subscribed", function () {
+      cy.request({
+        method: "POST",
+        url: "/api/subscribe",
+        failOnStatusCode: false,
+        body: { email: SUBSCRIBED_EMAIL },
+      }).as("postEmailSubscribe")
+
+      cy.get("@postEmailSubscribe").should((response) => {
+        // @ts-ignore
+        expect(response.status).to.eq(403)
       })
     })
   })
