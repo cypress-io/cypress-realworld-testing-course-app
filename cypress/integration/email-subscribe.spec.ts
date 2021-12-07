@@ -38,7 +38,9 @@ describe("Email Subscribe", () => {
       cy.getBySel("email-input").type(SUBSCRIBED_EMAIL)
       cy.getBySel("submit-button").click()
       cy.getBySel("email-success-message").should("not.exist")
-      cy.getBySel("email-error-message-subscribed").should("exist")
+      cy.getBySel("email-error-message-server")
+        .should("exist")
+        .contains("already exists. Please use a different email address.")
     })
   })
 
@@ -99,6 +101,21 @@ describe("Email Subscribe", () => {
         // @ts-ignore
         expect(response.status).to.eq(403)
       })
+    })
+
+    it("the request must be sent as content-type application/json", function () {
+      cy.intercept("POST", "/api/subscribe", (req) => {
+        req.headers["Content-Type"] = "text/html"
+      }).as("wrongHeader")
+
+      cy.visit("/")
+      cy.getBySel("email-input").type(EMAIL)
+      cy.getBySel("submit-button").click()
+
+      cy.getBySel("email-success-message").should("not.exist")
+      cy.getBySel("email-error-message-server")
+        .should("exist")
+        .contains("request must be sent as JSON")
     })
   })
 })

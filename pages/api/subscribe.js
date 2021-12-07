@@ -1,6 +1,14 @@
 const subscribed = ["john@example.com"]
 
 export default function handler(req, res) {
+  if (!req.rawHeaders.includes("application/json")) {
+    res.status(400).json({
+      message: `Error: request must be sent as JSON`,
+    })
+
+    return
+  }
+
   if (
     req.method === "POST" &&
     req.body.email &&
