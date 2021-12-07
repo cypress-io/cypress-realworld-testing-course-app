@@ -112,7 +112,7 @@ export default function HomeHero() {
                           {errors.email && (
                             <span
                               className="text-red-500"
-                              data-test="email-error-message"
+                              data-test="error-message"
                             >
                               {errors.email.message}
                             </span>
@@ -121,7 +121,7 @@ export default function HomeHero() {
                             isSubmitted.includes("Success:") && (
                               <div
                                 className="text-jade-500"
-                                data-test="email-success-message"
+                                data-test="success-message"
                               >
                                 {isSubmitted}
                               </div>
@@ -130,7 +130,7 @@ export default function HomeHero() {
                             isSubmitted.includes("Error:") && (
                               <div
                                 className="text-red-500"
-                                data-test="email-error-message-server"
+                                data-test="server-error-message"
                               >
                                 {isSubmitted}
                               </div>
