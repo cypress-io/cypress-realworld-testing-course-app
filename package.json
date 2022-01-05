@@ -28,7 +28,6 @@
     "update-algolia-index": "yarn create-search-index && ts-node scripts/updateAlgoliaIndex.ts"
   },
   "dependencies": {
-    "@fullstory/browser": "^1.4.9",
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.3",
     "@mapbox/rehype-prism": "^0.7.0",
