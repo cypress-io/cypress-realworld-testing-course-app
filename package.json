@@ -19,8 +19,7 @@
     "update-slugs": "ts-node scripts/updateSlugs.ts",
     "stop-only": "stop-only --folder cypress/integration",
     "test:unit": "mocha -r ts-node/register -r tsconfig-paths/register 'tests/**/*.ts'",
-    "types": "tsc --noEmit",
-    "update-algolia-index": "yarn create-search-index && ts-node scripts/updateAlgoliaIndex.ts"
+    "types": "tsc --noEmit"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.0",
