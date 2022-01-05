@@ -12,8 +12,6 @@
     "cypress:run:mobile": "cypress run --config viewportWidth=375,viewportHeight=667",
     "dev": "next dev",
     "dev:watch": "next-remote-watch ./content",
-    "generate-content": "ts-node scripts/generateContentFiles.ts",
-    "generate-rwe-content": "ts-node scripts/generateRealWorldExamples.ts",
     "lint": "next lint",
     "pre-commit": "yarn types && pretty-quick --staged && yarn run lint && yarn run stop-only",
     "prettier": "prettier --write '**/**.{ts,js,tsx}' '*.{json,md,yml}'",
