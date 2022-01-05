@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/testing-your-first-application</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/testing-foundations</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/cypress-fundamentals</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/cypress-fundamentals/command-chaining</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/cypress-fundamentals/cypress-runs-in-the-browser</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/cypress-fundamentals/how-to-write-a-test</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/testing-foundations/knowing-what-to-test</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/testing-foundations/manual-vs-automated-testing</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/testing-foundations/testing-is-a-mindset</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/testing-your-first-application/app-install-and-overview</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/testing-your-first-application/installing-cypress-and-writing-our-first-test</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+<url><loc>https://cypress-realworld-testing-course-app.vercel.app/testing-your-first-application/setting-up-data-before-each-test</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-01-05T15:27:06.462Z</lastmod></url>
+</urlset>

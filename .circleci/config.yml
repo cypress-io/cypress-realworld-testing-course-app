@@ -9,14 +9,6 @@ executors:
       - image: "cypress/browsers:node14.17.0-chrome88-ff89"
     resource_class: medium+
 
-jobs:
-  update-algolia-index:
-    executor: with-chrome-and-firefox
-    steps:
-      - checkout
-      - run: yarn install
-      - run: yarn update-algolia-index
-
 workflows:
   build-and-test:
     jobs:
@@ -53,18 +45,3 @@ workflows:
           start: yarn start
           requires:
             - Setup Linux
-          post-steps:
-            - run:
-                name: Check for Broken Links
-                command: yarn check:links
-
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 0 * * *"
-          filters:
-            branches:
-              only:
-                - main
-    jobs:
-      - update-algolia-index

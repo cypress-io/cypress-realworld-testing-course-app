@@ -55,7 +55,7 @@ describe("machine utils", () => {
       type: "SUBMIT_ANSWER",
       id: lessonPath,
       challengeIndex: 0,
-      userAnswerIndex: 2,
+      userAnswerIndex: 0,
     }
     progressService.send(answerEvent)
 

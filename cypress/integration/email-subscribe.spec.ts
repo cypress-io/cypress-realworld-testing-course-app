@@ -120,3 +120,5 @@ describe("Email Subscribe", () => {
     })
   })
 })
+
+export {}
