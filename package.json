@@ -16,7 +16,6 @@
     "pre-commit": "yarn types && pretty-quick --staged && yarn run lint && yarn run stop-only",
     "prettier": "prettier --write '**/**.{ts,js,tsx}' '*.{json,md,yml}'",
     "start": "next start",
-    "update-rwe-slugs": "ts-node scripts/updateRWESlugs.ts",
     "update-slugs": "ts-node scripts/updateSlugs.ts",
     "stop-only": "stop-only --folder cypress/integration",
     "test:unit": "mocha -r ts-node/register -r tsconfig-paths/register 'tests/**/*.ts'",
