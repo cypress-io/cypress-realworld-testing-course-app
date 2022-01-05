@@ -28,7 +28,6 @@
     "update-algolia-index": "yarn create-search-index && ts-node scripts/updateAlgoliaIndex.ts"
   },
   "dependencies": {
-    "@docsearch/react": "^3.0.0-alpha.41",
     "@fullstory/browser": "^1.4.9",
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.3",
