@@ -13,6 +13,17 @@ import { progressService } from "../../machines/progressService"
 import Layout from "../../components/Layout"
 import LessonLayout from "../../components/Lesson/LessonLayout"
 import MCChallenge from "../../components/Lesson/MultipleChoiceChallenge"
+import { fetchCourses } from "../../lib/fetch-courses"
+import {
+  LessonTableOfContents,
+  MultipleChoiceChallenge,
+} from "../../types/common"
+import {
+  CONTENT_PATH,
+  allContentFilePaths,
+  getToCForMarkdown,
+} from "../../utils/mdxUtils"
+import { isLessonCompleted } from "../../utils/machineUtils"
 
 const NextLessonBtn = dynamic(
   () => import("../../components/Lesson/NextLessonBtn"),
@@ -34,18 +45,6 @@ const SkipChallenge = dynamic(
     ssr: false,
   }
 )
-
-import {
-  LessonTableOfContents,
-  MultipleChoiceChallenge,
-} from "../../types/common"
-import {
-  CONTENT_PATH,
-  allContentFilePaths,
-  getToCForMarkdown,
-} from "../../utils/mdxUtils"
-import { isLessonCompleted } from "../../utils/machineUtils"
-import coursesJson from "../../data/courses.json"
 
 // Custom components/renderers to pass to MDX.
 // Since the MDX files aren't loaded by webpack, they have no knowledge of how
@@ -155,6 +154,7 @@ export default function LessonPage({
 }
 
 export const getStaticProps = async ({ params }) => {
+  const coursesJson = await fetchCourses()
   const courses = Object.keys(coursesJson)
   const contentFilePath = path.join(
     CONTENT_PATH,
