@@ -3,7 +3,7 @@ import Layout from "../../components/Layout"
 import CourseHero from "../../components/Course/CourseHero"
 import CourseContent from "../../components/Course/CourseContent"
 import { progressService } from "../../machines/progressService"
-import coursesJson from "../../data/courses.json"
+import { fetchCourses } from "../../lib/fetch-courses"
 
 export default function SectionPage({
   title,
@@ -42,6 +42,7 @@ export default function SectionPage({
 }
 
 export async function getStaticProps({ params }) {
+  const coursesJson = await fetchCourses()
   const { title, lessons, description, learnFeatures } =
     coursesJson[params.course]
   const courses = Object.keys(coursesJson)
@@ -60,6 +61,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
+  const coursesJson = await fetchCourses()
   const courses = Object.keys(coursesJson)
   const paths = courses.map((course) => {
     const { title, lessons } = coursesJson[course]
