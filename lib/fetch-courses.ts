@@ -1,6 +1,5 @@
-export async function fetchCourses() {
-  const res = await fetch("http://localhost:3000/api/courses")
-  const data = await res.json()
+import coursesJson from "../data/courses.json"
 
-  return data
+export async function fetchCourses() {
+  return coursesJson
 }
