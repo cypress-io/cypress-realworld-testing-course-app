@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 describe("Courses API", () => {
   it("returns the correct courses and all of their respective lessons", () => {
     cy.request("/api/courses").as("courses")
