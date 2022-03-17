@@ -44,3 +44,5 @@ describe("A/B Testing with Google Optimize", () => {
     cy.window().its("dataLayer").should("have.length", 6)
   })
 })
+
+export {}
