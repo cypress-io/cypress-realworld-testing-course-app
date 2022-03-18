@@ -1,11 +1,12 @@
-/* 
-  Note: These tests rely upon local storage state from previous tests, 
+/*
+  Note: These tests rely upon local storage state from previous tests,
   so make sure to run all of them at once and in order
 */
-import coursesJson from "../../data/courses.json"
+
 const { _ } = Cypress
-const sectionSlug = "cypress-fundamentals"
-const lessons = coursesJson[sectionSlug].lessons
+import coursesJson from "../../data/courses.json"
+const courseSlug = "testing-your-first-application"
+const lessons = coursesJson[courseSlug].lessons
 
 describe("Progress State & Local Storage", () => {
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe("Progress State & Local Storage", () => {
   })
 
   it("the progress state on the lesson page is preserved upon refresh", () => {
-    cy.visit(`/${sectionSlug}/${lessons[0].slug}`)
+    cy.visit(`/${courseSlug}/${lessons[0].slug}`)
     cy.get("#answer-0").click()
     cy.getBySel("next-lesson-button").should("be.visible")
     cy.getBySel("lesson-complete-0").should("have.class", "bg-blue-600")
@@ -28,18 +29,23 @@ describe("Progress State & Local Storage", () => {
     cy.getBySel("lesson-complete-0").should("have.class", "bg-blue-600")
   })
 
-  it("the lesson page displays the complete lesson button when a lesson is completed and navigates to the homepage after the final lesson is completed", () => {
-    cy.visit(`/${sectionSlug}/${coursesJson[sectionSlug].lessons[0].slug}`)
+  it("the next lesson button says 'Complete Course' when all course lessons are completed", () => {
+    cy.visit(`/${courseSlug}/${coursesJson[courseSlug].lessons[0].slug}`)
 
     _.each(lessons, (lesson, index) => {
       cy.location("pathname").should(
         "eq",
-        `/${sectionSlug}/${coursesJson[sectionSlug].lessons[index].slug}`
+        `/${courseSlug}/${coursesJson[courseSlug].lessons[index].slug}`
       )
       cy.getBySel(
         `"challenge-answer-${lesson["challenges"][0]["correctAnswerIndex"]}"`
       ).click()
       cy.getBySel("lesson-complete-0").should("have.class", "bg-blue-600")
+
+      if (index + 1 === lessons.length) {
+        cy.getBySel("next-lesson-button").contains("Complete Course")
+      }
+
       cy.getBySel("next-lesson-button").click()
     })
 
@@ -57,7 +63,7 @@ describe("Progress State & Local Storage", () => {
   })
 
   it("all of the lesson cards on the course page have a status of 'Completed'", () => {
-    cy.visit(`/${sectionSlug}`)
+    cy.visit(`/${courseSlug}`)
 
     cy.getBySel("course-steps").within(($course) => {
       _.each(lessons, (lesson, index) => {
