@@ -1,7 +1,8 @@
 import Subscribe from "./Subscribe"
 
 describe("Subscribe", () => {
-  it("should mount", () => {
+  it("contains the correct placeholder text", () => {
     cy.mount(<Subscribe />)
+    cy.get("input").should("have.attr", "placeholder", "Subscribe for Updates")
   })
 })
