@@ -73,4 +73,4 @@ describe("Progress State & Local Storage", () => {
   })
 })
 
-export {}
+export { }
