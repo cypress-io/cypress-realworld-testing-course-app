@@ -51,7 +51,7 @@
     "@types/react": "^17.0.39",
     "autoprefixer": "^10.4.2",
     "chai": "^4.3.6",
-    "cypress": "9.5.1",
+    "cypress": "^10.0.1",
     "eslint": "^8.10.0",
     "eslint-config-next": "^12.1.0",
     "eslint-config-prettier": "^8.5.0",
