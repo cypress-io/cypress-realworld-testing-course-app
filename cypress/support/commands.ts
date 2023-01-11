@@ -21,5 +21,8 @@ Cypress.Commands.add("restoreLocalStorage", () => {
     localStorage.setItem(key, LOCAL_STORAGE_MEMORY[key])
   })
 })
+Cypress.Commands.add("getByData", (selector) => {
+  return cy.get(`[data-test=${selector}]`)
+})
 
 export {}
