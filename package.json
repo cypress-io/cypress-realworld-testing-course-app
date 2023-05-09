@@ -36,7 +36,7 @@
     "glob": "^7.2.0",
     "globby": "^13.1.1",
     "linkinator": "^3.0.3",
-    "next": "^12.1.0",
+    "next": "^12.3.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.27.1",
