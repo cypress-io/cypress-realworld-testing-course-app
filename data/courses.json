@@ -1,0 +1,158 @@
+{
+  "testing-your-first-application": {
+    "title": "Testing Your First Next.js Application",
+    "slug": "testing-your-first-application",
+    "description": "How to test a Next.js e-commerce app with Cypress.",
+    "image": "/images/courses/store.png",
+    "learnFeatures": [
+      "Lorem ipsum dolor sit amet",
+      "Lorem ipsum dolor sit amet",
+      "Lorem ipsum dolor sit amet"
+    ],
+    "lessons": [
+      {
+        "title": "App Install and Overview",
+        "slug": "app-install-and-overview",
+        "description": "How to install the TodoMVC application and get it up and running.",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
+      },
+      {
+        "title": "Installing Cypress and writing our first test",
+        "slug": "installing-cypress-and-writing-our-first-test",
+        "description": "How to install Cypress and write your first end to end test.",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
+      },
+      {
+        "title": "Setting up Data Before Each Test",
+        "slug": "setting-up-data-before-each-test",
+        "description": "How to utilize the beforeEach hook to setup data before each test.",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
+      }
+    ]
+  },
+  "testing-foundations": {
+    "title": "Testing Foundations",
+    "slug": "testing-foundations",
+    "description": "The fundamentals you need to write great tests.",
+    "image": "https://tailwindui.com/img/component-images/inbox-app-screenshot-2.jpg",
+    "learnFeatures": [
+      "Lorem ipsum dolor sit amet",
+      "Lorem ipsum dolor sit amet",
+      "Lorem ipsum dolor sit amet"
+    ],
+    "lessons": [
+      {
+        "title": "Testing is a Mindset",
+        "slug": "testing-is-a-mindset",
+        "description": "Understand the testing mindset that is necessary before you begin writing tests.",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
+      },
+      {
+        "title": "Knowing What to Test",
+        "slug": "knowing-what-to-test",
+        "description": "How to test user journeys, new features and bugs within your application.",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
+      },
+      {
+        "title": "Manual vs Automated Testing",
+        "slug": "manual-vs-automated-testing",
+        "description": "The differences between automated testing and manual testing.",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
+      }
+    ]
+  },
+  "cypress-fundamentals": {
+    "title": "Cypress Fundamentals",
+    "slug": "cypress-fundamentals",
+    "description": "The aspects of Cypress you must know.",
+    "image": "/images/courses/cypress-rwa.png",
+    "learnFeatures": [
+      "Lorem ipsum dolor sit amet",
+      "Lorem ipsum dolor sit amet",
+      "Lorem ipsum dolor sit amet"
+    ],
+    "lessons": [
+      {
+        "title": "How to Write a Test",
+        "slug": "how-to-write-a-test",
+        "description": "How to write tests using the Arrange, Act and Assert pattern.",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
+      },
+      {
+        "title": "Cypress Runs in the Browser",
+        "slug": "cypress-runs-in-the-browser",
+        "description": "Cypress's architecture, unlike most other testing tools, runs inside of the browser. This means that your tests are being executed in the same environment as your application.",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
+      },
+      {
+        "title": "Command Chaining",
+        "slug": "command-chaining",
+        "description": "It's important to understand the mechanism Cypress uses to chain commands together. It manages a Promise chain on your behalf...",
+        "challenges": [
+          {
+            "challengeType": "multiple-choice",
+            "question": "Vestibulum congue consectetur quam in mattis?",
+            "answers": ["True", "False"],
+            "correctAnswerIndex": 0
+          }
+        ]
+      }
+    ]
+  }
+}

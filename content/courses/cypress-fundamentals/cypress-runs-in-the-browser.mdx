@@ -1,0 +1,39 @@
+# Cypress runs in the browser
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mattis lobortis maximus. Quisque egestas, sem fringilla egestas aliquet, turpis nisl placerat justo, vitae feugiat ligula urna in justo. Curabitur porta risus libero, tempus imperdiet arcu auctor sed. Praesent eget luctus tortor, vel hendrerit sapien. Phasellus quis ex ligula. Curabitur vehicula, lacus imperdiet ornare pulvinar, sem massa vulputate sem, eget mattis ex diam a lorem. Cras ac ex gravida magna vestibulum volutpat et et elit. Nullam vitae porttitor nulla, sed volutpat nisi.
+
+## Section 1
+
+```js
+describe("Next Lesson Button on Course Pages", () => {
+  beforeEach(() => {
+    // @ts-ignore
+    cy.restoreLocalStorage()
+  })
+
+  afterEach(() => {
+    // @ts-ignore
+    cy.saveLocalStorage()
+  })
+
+  it("says 'Start Course' and links to the first lesson if none of the lessons have been completed", () => {
+    cy.visit(`/${sectionSlug}`)
+    cy.getBySel("next-lesson-button").then(($btn) => {
+      // @ts-ignore
+      const text = $btn.text()
+      // @ts-ignore
+      const href = $btn.attr("href")
+
+      expect(text).to.eq("Start Course")
+      expect(href).to.eq(
+        `/${sectionSlug}/${coursesJson[`${sectionSlug}`].lessons[0].slug}`
+      )
+    })
+  })
+```
+
+Sed elementum ut nulla nec sagittis. Sed orci neque, cursus id lacinia id, suscipit eget ligula. Etiam mollis dolor et libero dapibus facilisis. Phasellus erat ex, efficitur egestas lorem vitae, rhoncus convallis quam. Aliquam non laoreet ipsum. Nullam luctus, felis ut imperdiet mattis, ligula ligula ultricies orci, at dignissim erat odio id ligula. Praesent placerat sapien eu urna hendrerit pulvinar. Integer eget diam enim. Cras id massa porta, feugiat mi ac, euismod dui. Ut sed justo augue. Quisque viverra enim id nisi placerat, nec tincidunt urna facilisis. Nam vitae vestibulum ex, quis malesuada orci. Nulla a mi nec sem consectetur luctus non placerat urna.
+
+## Section 2
+
+Vestibulum congue consectetur quam in mattis. Maecenas condimentum gravida arcu eu blandit. Aenean lorem risus, imperdiet eu bibendum vitae, imperdiet in diam. Phasellus quis risus ac leo condimentum egestas quis in tortor. Pellentesque at aliquet urna. Proin quis est tincidunt, molestie sem sit amet, aliquam leo. Suspendisse egestas lacinia dignissim.

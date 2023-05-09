@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://cypress-realworld-testing-course-app.vercel.app/
+
+# Sitemaps
+Sitemap: https://cypress-realworld-testing-course-app.vercel.app/sitemap.xml
