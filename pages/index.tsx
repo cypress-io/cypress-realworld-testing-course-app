@@ -3,7 +3,7 @@ import Layout from "../components/Layout"
 import HomeHero from "../components/Home/HomeHero"
 import HomeFeatures from "../components/Home/HomeFeatures"
 import HomeCourses from "../components/Home/HomeCourses"
-import { progressService } from "../machines/progressService"
+import { progressService } from "../lib/machines/progressService"
 import { fetchCourses } from "../lib/fetch-courses"
 
 export default function Home({ content, courses }) {

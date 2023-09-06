@@ -5,8 +5,8 @@ import {
   getCourse,
   getChallenge,
   isSectionCompleted,
-} from "../utils/machineUtils"
-import coursesJson from "../data/courses.json"
+} from "../../utils/machineUtils"
+import coursesJson from "../../data/courses.json"
 
 const defaultContext: ProgressContext = {
   sectionsCompleted: [],

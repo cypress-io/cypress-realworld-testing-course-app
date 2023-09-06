@@ -2,7 +2,7 @@ import Head from "next/head"
 import Layout from "../../components/Layout"
 import CourseHero from "../../components/Course/CourseHero"
 import CourseContent from "../../components/Course/CourseContent"
-import { progressService } from "../../machines/progressService"
+import { progressService } from "../../lib/machines/progressService"
 import { fetchCourses } from "../../lib/fetch-courses"
 
 export default function SectionPage({
