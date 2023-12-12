@@ -34,6 +34,7 @@
 //       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
 //     }
 //   }
+<<<<<<< Updated upstream
 // }
 
 declare namespace Cypress {
@@ -45,3 +46,6 @@ declare namespace Cypress {
 Cypress.Commands.add("getByData", (selector) => {
   return cy.get(`[data-test=${selector}]`)
 })
+=======
+// }
+>>>>>>> Stashed changes
