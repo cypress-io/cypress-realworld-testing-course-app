@@ -1,0 +1,11 @@
+name: Cyrpress Project
+on:
+ push:
+   branches:
+     - Test
+jobs:
+ Cypress-Test:
+   runs-on: ubuntu-latest
+   steps:
+     - name: Checkout GitCode
+       uses: actions/checkout@v2
