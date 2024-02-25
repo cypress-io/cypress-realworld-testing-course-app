@@ -4,7 +4,7 @@ describe("home page", () => {
   })
 
   it("the h1 contains the correct text", () => {
-    cy.get("[data-test='hero-heading']").contains(
+    cy.getByData("hero-heading").contains(
       "Testing Next.js Applications with Cypress"
     )
   })
