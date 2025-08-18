@@ -32,7 +32,7 @@ jobs:
 
       # 5️⃣ Wait until the app is ready (e.g., on port 4200)
       - name: Wait for app to be ready
-        run: npx wait-on http://localhost:4200
+        run: npx wait-on http://localhost:3000
 
       # 6️⃣ Run Cypress tests
       - name: Run Cypress
