@@ -8,7 +8,7 @@ on:
     schedule:
       # Runs every day at 02:00 UTC
       - cron: "0 2 * * *"
-    workflow_dispatch:   # <-- enables manual trigger
+  workflow_dispatch: # <-- enables manual trigger
 
 jobs:
   test:
