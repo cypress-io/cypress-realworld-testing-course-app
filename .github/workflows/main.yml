@@ -15,30 +15,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repo
+      # 1️ Checkout the repo
       - uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js
+      # 2️ Setup Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # 3️⃣ Install dependencies
+      # 3️ Install dependencies
       - run: npm ci
 
-      # 4️⃣ Start the app in the background
+      # 4️ Start the app in the background
       - name: Start app
         run: npm run dev &
 
-      # 5️⃣ Wait until the app is ready (e.g., on port 4200)
+      # 5️ Wait until the app is ready (e.g., on port 4200)
       - name: Wait for app to be ready
         run: npx wait-on http://localhost:3000
 
-      # 6️⃣ Run Cypress tests
+      # 6️ Run Cypress tests
       - name: Run Cypress
         run: npx cypress run
 
-      # 7️⃣ Upload Mochawesome report
+      # 7️ Upload Mochawesome report
       - name: Upload Cypress Report
         uses: actions/upload-artifact@v4
         with:
