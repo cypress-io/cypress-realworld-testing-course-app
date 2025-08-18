@@ -1,5 +1,10 @@
 describe("template spec", () => {
-  it("passes", () => {
+  it("TC 1", () => {
+    cy.visit("/")
+    cy.contains("Testing Next.js Applications with Cypress")
+  })
+
+  it("TC 2", () => {
     cy.visit("/")
     cy.contains("Testing Next.js Applications with Cypress")
   })
