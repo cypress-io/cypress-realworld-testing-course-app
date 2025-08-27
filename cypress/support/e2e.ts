@@ -16,3 +16,9 @@
 // Import commands.js using ES2015 syntax:
 import "./commands"
 import "cypress-mochawesome-reporter/register"
+
+before(() => {
+  cy.log(
+    "Global before() hook. Defined in e2e.ts support file. Precondition/Configuration goes here."
+  )
+})
