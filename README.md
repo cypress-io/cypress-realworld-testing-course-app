@@ -1,5 +1,19 @@
-# Real World Testing with Cypress - Course App
+# Real World Testing with Cypress - Course App - Small Cypress Framework
 
-This application is for the [Testing your first application course](https://learn.cypress.io/testing-your-first-application) on [learn.cypress.io](https://learn.cypress.io/).
+In this repo cypress learning application is used in aim to create small cypres e2e testing framework proof of concept. 
 
-The `start` branch is the main branch for this repo and is the starting point for the course. The [final](https://github.com/cypress-io/cypress-realworld-testing-course-app/tree/final) branch contains the completed tests.
+Main aspects shown here are:
+
+1. cypress installation as a part of app repo
+2. cypress folder structure
+3. Page Object Model vs cypress commands (s way to make tests scalable)
+4. Mocha Awesome Report
+5. Test Case Execution in GitHub Actions
+
+How to run:
+
+1. clone repo with git
+2. Install needed software (Node.js, VSCode)
+3. Install dependencies with: npm install
+4. Start application with: npm run dev
+5. Start cypress with: npx cypress open
