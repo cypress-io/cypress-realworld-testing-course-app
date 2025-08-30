@@ -22,7 +22,7 @@ declare global {
 }
 // --Load app cy command --
 Cypress.Commands.add("loadApp", (timeout: number) => {
-  cy.visit("/", { timeout })
+  cy.visit("/", { timeout: timeout })
 })
 // --Performance measurement commands --
 Cypress.Commands.add("startPerformanceMeasurement", () => {

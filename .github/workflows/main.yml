@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
   schedule:
-  # Runs every day at 02:00 UTC
+    # Runs every day at 02:00 UTC
     - cron: "0 2 * * *"
   workflow_dispatch: # <-- enables manual trigger
 
@@ -44,3 +44,4 @@ jobs:
         with:
           name: cypress-report
           path: cypress/reports/
+        if: always()
