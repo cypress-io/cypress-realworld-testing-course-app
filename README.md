@@ -17,3 +17,8 @@ How to run:
 3. Install dependencies with: npm install
 4. Start application with: npm run dev
 5. Start cypress with: npx cypress open
+6. Execute tests from CLI: npx cypress run --browser chrome
+
+Mocha Awesome Report
+
+Mocha awesome report is configured. Cypress store report to: cypress\reports folder. Report is available as github pipeline artifactory. Local reports are ignored by git.
