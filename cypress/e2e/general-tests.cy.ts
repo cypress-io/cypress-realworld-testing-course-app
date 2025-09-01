@@ -8,7 +8,6 @@ describe("General Basic Tests - Playground", () => {
   })
 
   it("TC2: Check expected amount of available courses", () => {
-    cy.visit("/")
     cy.get("dt").eq(0).contains("4 Courses")
   })
 })
