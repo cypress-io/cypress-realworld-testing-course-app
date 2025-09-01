@@ -3,7 +3,6 @@ describe("General Basic Tests - Playground", () => {
     cy.loadApp(5800) // Custom command to load the app with a timeout
   })
   it("TC1: Validate title value", () => {
-    cy.loadApp(5800)
     cy.contains("Testing Next.js Applications with Cypress")
   })
 
