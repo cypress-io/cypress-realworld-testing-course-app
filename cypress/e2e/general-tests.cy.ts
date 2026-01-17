@@ -4,6 +4,7 @@ describe("Home Page Tests", () => {
   const homePage = new HomePage()
 
   beforeEach(() => {
+    cy.viewport(1280, 720)
     cy.loadApp(6500)
   })
 

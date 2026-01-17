@@ -7,6 +7,8 @@ export default defineConfig({
       return config
     },
     baseUrl: "http://localhost:3000",
+    viewportWidth: 1280,
+    viewportHeight: 720,
   },
   reporter: "cypress-mochawesome-reporter",
   reporterOptions: {
