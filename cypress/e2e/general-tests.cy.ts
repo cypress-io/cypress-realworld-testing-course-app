@@ -1,10 +1,10 @@
-import { HomePage } from "../pages/testing-your-first-application"
+import { HomePage } from "../pages/homePage"
 
 describe("Home Page Tests", () => {
   const homePage = new HomePage()
 
   beforeEach(() => {
-    cy.loadApp(6000)
+    cy.loadApp(6500)
   })
 
   describe("Hero Section", () => {
@@ -19,25 +19,25 @@ describe("Home Page Tests", () => {
 
   describe("Courses Section", () => {
     it("should display the expected number of courses", () => {
-      cy.get("dt").eq(0).should("contain.text", "4 Courses")
+      homePage.verifyCourseStatsText("4 Courses")
     })
 
     it("should display all course cards", () => {
-      homePage.courseListItems().should("have.length.greaterThan", 0)
+      homePage.courseCards().should("have.length", 4)
     })
 
     it("should have clickable course links", () => {
-      homePage.courseListItems().first().find("a").should("exist")
+      homePage.courseLinks().first().should("exist")
     })
   })
 
   describe("Navigation", () => {
-    it("should display the menu button", () => {
-      homePage.menuButton().should("be.visible")
+    it("should display the courses dropdown", () => {
+      homePage.coursesDropdown().should("be.visible")
     })
 
-    it("should open the menu when clicking the menu button", () => {
-      homePage.clickMenu()
+    it("should open the courses menu when clicking the dropdown", () => {
+      homePage.clickCoursesDropdown()
       homePage.verifyMenuIsVisible()
     })
   })
