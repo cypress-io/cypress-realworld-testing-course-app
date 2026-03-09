@@ -1,0 +1,152 @@
+name: Cypress Tests + AI QA Fix
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  cypress-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start Next.js dev server
+        run: npm run dev > /dev/null 2>&1 &
+        env:
+          CI: true
+
+      - name: Wait for dev server
+        run: npx wait-on http://localhost:3000 --timeout 30000
+
+      - name: Run Cypress tests
+        id: tests
+        run: npm run cy:run
+        continue-on-error: true
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-reports
+          path: cypress/reports/
+          retention-days: 30
+
+      - name: Upload screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots/
+          retention-days: 7
+
+      - name: Check test results
+        if: steps.tests.outcome == 'failure'
+        run: |
+          echo "❌ Tests failed - AI fix generation is available locally"
+          echo "To fix locally, run:"
+          echo "  npx ts-node ai/ollamaFix.ts cypress/e2e/general-tests.cy.ts"
+          echo "  npm run cy:run"
+          exit 1
+
+      - name: Comment on PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let summary = '## Cypress Test Report\n\n';
+            let status = '${{ steps.tests.outcome }}' === 'success' ? '✅ Passed' : '❌ Failed';
+            summary += `**Status:** ${status}\n`;
+            
+            // Try to read test report if available
+            const reportPath = 'cypress/reports/.jsons/mochawesome.json';
+            if (fs.existsSync(reportPath)) {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              let runs = report.results || [];
+              let totalTests = 0, passing = 0, failing = 0;
+              
+              runs.forEach(run => {
+                if (run.suites) {
+                  function countTests(suite) {
+                    if (suite.tests) {
+                      suite.tests.forEach(t => {
+                        totalTests++;
+                        if (t.state === 'passed') passing++;
+                        else if (t.state === 'failed') failing++;
+                      });
+                    }
+                    if (suite.suites) {
+                      suite.suites.forEach(s => countTests(s));
+                    }
+                  }
+                  suite.suites.forEach(s => countTests(s));
+                }
+              });
+              
+              summary += `\n**Results:** ${passing} passing, ${failing} failing out of ${totalTests} tests`;
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
+
+  # Note: Ollama integration in GitHub Actions requires:
+  # 1. Self-hosted runner with Ollama installed and running
+  # 2. Or: Docker container with Ollama service
+  # 3. Network access to Ollama service endpoint
+
+  # Example Ollama integration (commented out - requires setup):
+  # ai-fix-generation:
+  #   runs-on: [self-hosted, ollama-enabled]  # Custom runner with Ollama
+  #   needs: cypress-tests
+  #   if: failure()
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: "18"
+  #         cache: "npm"
+  #
+  #     - name: Install dependencies
+  #       run: npm ci
+  #
+  #     - name: Verify Ollama is running
+  #       run: |
+  #         curl -s http://localhost:11434/api/tags | jq . || \
+  #         (echo "⚠️  Ollama not running"; exit 1)
+  #
+  #     - name: Generate AI fix
+  #       run: npx ts-node ai/ollamaFix.ts cypress/e2e/general-tests.cy.ts
+  #       continue-on-error: true
+  #
+  #     - name: Apply AI fix
+  #       if: success()
+  #       run: npx ts-node ai/fixTests.ts cypress/e2e/general-tests.cy.ts
+  #
+  #     - name: Create pull request with fix
+  #       if: success()
+  #       uses: peter-evans/create-pull-request@v5
+  #       with:
+  #         branch: ai-test-fix
+  #         title: "🤖 AI-Generated Test Fix"
+  #         body: "Automatically generated fix for failing tests using Ollama AI"

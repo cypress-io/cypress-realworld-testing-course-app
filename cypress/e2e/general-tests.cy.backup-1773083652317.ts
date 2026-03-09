@@ -24,8 +24,7 @@ describe("Home Page Tests", () => {
     })
 
     it("should display all course cards", () => {
-      cy.wait(2000) // Wait for all courses to load
-      homePage.courseCards().should("have.length.gte", 3) // Allow 3+ cards
+      homePage.courseCards().should("have.length", 4)
     })
 
     it("should have clickable course links", () => {
