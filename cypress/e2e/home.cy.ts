@@ -15,7 +15,7 @@ describe("Home page", () => {
       cy.get("dt").eq(1).contains("25+ Lessons")
       cy.get("dt").eq(2).contains("Free and Open Source")
     })
-  })
+  }) 
 
   context("Courses section", () => {
     it("Course: Testing Your First Next.js Application", () => {
