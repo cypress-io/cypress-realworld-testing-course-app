@@ -55,7 +55,7 @@
     "title": "Testing Foundations",
     "slug": "testing-foundations",
     "description": "The fundamentals you need to write great tests.",
-    "image": "https://tailwindui.com/img/component-images/inbox-app-screenshot-2.jpg",
+    "image": "/images/hero/cypress-real-world-app.png",
     "learnFeatures": [
       "Lorem ipsum dolor sit amet",
       "Lorem ipsum dolor sit amet",

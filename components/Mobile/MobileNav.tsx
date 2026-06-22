@@ -17,8 +17,8 @@ export default function MobileProgressMenu({
             <Link href="/">
               <img
                 className="h-8 w-auto sm:h-10"
-                src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"
-                alt=""
+                src="/images/logo/cypress-logo.png"
+                alt="Cypress"
               />
             </Link>
           </div>
@@ -64,8 +64,8 @@ export default function MobileProgressMenu({
                 <div>
                   <img
                     className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"
-                    alt="Workflow"
+                    src="/images/logo/cypress-logo.png"
+                    alt="Cypress"
                   />
                 </div>
                 <div className="-mr-2">
