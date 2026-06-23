@@ -99,7 +99,8 @@ export default function HomeHero() {
                   <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
                     <img
                       className="w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                      src="https://tailwindui.com/img/component-images/inbox-app-screenshot-1.jpg"
+                      src="/images/hero/cypress-real-world-app.png"
+                      alt="Cypress Real World App"
                     />
                   </div>
                 </div>
